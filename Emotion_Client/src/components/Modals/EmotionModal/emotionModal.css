@@ -1,0 +1,208 @@
+/* Modal Container */
+.emotionModal_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.625rem;
+}
+
+/* Card */
+.emotionModal_card {
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  width: 100%;
+}
+
+/* Input Container */
+.emotionModal_input_container {
+  position: relative;
+  margin-top: 1px;
+  border: 2px solid #9c5035;
+  border-radius: 12px;
+  padding: 0.4%;
+  background-color: #f9fafb;
+}
+
+/* Floating Label */
+.form-floating > label {
+  color: #9c5035;
+  font-size: 14px;
+  transition: all 0.3s ease-in-out;
+  padding-left: 14px;
+}
+
+.form-floating > .form-control,
+.form-floating > .form-select {
+  border: 2px solid #9c5035;
+  border-radius: 12px;
+  background-color: #f9fafb;
+  font-size: 16px;
+  padding: 12px;
+  color: #374151;
+}
+
+.form-floating > .form-control::placeholder {
+  color: #7a625a;
+}
+
+.form-floating > .form-control:focus,
+.form-floating > .form-select:focus {
+  border-color: #6b3d2e;
+  box-shadow: 0 0 5px rgba(156, 80, 53, 0.4);
+}
+
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select:not(:placeholder-shown) ~ label {
+  transform: translateY(-12px);
+  font-size: 12px;
+  color: #6b3d2e;
+}
+
+/* Textarea */
+.emotionModal_textarea {
+  width: 100%;
+  background: transparent;
+  outline: none;
+  color: #374151;
+  resize: none;
+  border: none;
+  font-size: 16px;
+  padding: 0.625rem;
+}
+
+/* Character Counter & Icon */
+.emotionModal_char_counter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 5px;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.emotionModal_clipboard_icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+/* Modal Buttons */
+.emotionModal_body .btn {
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 16px;
+}
+
+.emotionModal_body .btn-primary {
+  background-color: #9c5035;
+  border-color: #9c5035;
+}
+
+.emotionModal_body .btn-primary:hover {
+  background-color: #6b3d2e;
+  border-color: #6b3d2e;
+}
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .emotionModal_container {
+    padding: 0.625rem;
+    min-height: 70vh;
+  }
+  .emotionModal_card {
+    padding: 20px;
+  }
+}
+
+/* Mood Selector Ripple Style */
+.mood-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 24px;
+  flex-wrap: wrap;
+}
+
+.mood_btn {
+  border-radius: 50%;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+.mood_btn:nth-child(1),
+.mood_btn:nth-child(7) {
+  width: 40px;
+  height: 40px;
+}
+
+.mood_btn:nth-child(2),
+.mood_btn:nth-child(6) {
+  width: 50px;
+  height: 50px;
+}
+
+.mood_btn:nth-child(3),
+.mood_btn:nth-child(5) {
+  width: 60px;
+  height: 60px;
+}
+
+.mood_btn:nth-child(4) {
+  width: 70px;
+  height: 70px;
+}
+
+
+/* Hover Effect */
+.mood_btn {
+  transition: transform 0.25s ease, background 0.3s ease;
+}
+
+.mood_btn:hover {
+  transform: scale(1.25);
+}
+
+.mood_btn.selected {
+  transform: scale(1.35);
+   box-shadow: 0 0 10px rgba(156, 80, 53, 0.3);
+  outline: 1px solid #ffffff;
+}
+
+/* Default Mood Colors */
+.mood_btn:nth-child(1) {
+  background-color: #fde2e2 !important;
+}
+
+.mood_btn:nth-child(2) {
+  background-color: #fff3cd !important;
+}
+
+.mood_btn:nth-child(3) {
+  background-color: #f8d7da !important;
+}
+
+.mood_btn:nth-child(4) {
+  background-color: #d4edda !important;
+}
+
+.mood_btn:nth-child(5) {
+  background-color: #e0c3fc !important;
+}
+
+.mood_btn:nth-child(6) {
+  background-color: #fcd5ce !important;
+}
+
+.mood_btn:nth-child(7) {
+  background-color: #d1f7ff !important;
+}

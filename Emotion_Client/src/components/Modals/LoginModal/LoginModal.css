@@ -1,0 +1,273 @@
+/* Emotional Auth Modal */
+.emotion-auth-modal .modal-content {
+  border: none;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(101, 90, 142, 0.2);
+  background: #fbfaff;
+}
+
+/* Header with Emotional Illustration */
+.modal-header {
+  border-bottom: none;
+  padding: 30px 30px 20px;
+  background: linear-gradient(135deg, #8a7bc8 0%, #6a5ac4 100%);
+  color: white;
+  text-align: center;
+  position: relative;
+}
+
+.header-content {
+  width: 100%;
+}
+
+.emotion-illustration {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 2px;
+}
+
+.emoji-bubble {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.emoji-bubble:hover {
+  transform: translateY(-5px);
+}
+
+.modal-dialog{
+  height: 100px;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: -15px!important;
+  margin-top: 0;
+  letter-spacing: 0.3px;
+}
+
+
+/* Form Elements */
+.auth-form {
+  padding: 0 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #5a4b8b;
+  gap: 8px;
+}
+
+.label-icon {
+  color: #8a7bc8;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid #e0dbf5;
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: white;
+  color: #4a3b7b;
+}
+
+.form-input:focus {
+  border-color: #8a7bc8;
+  box-shadow: 0 0 0 3px rgba(138, 123, 200, 0.1);
+  outline: none;
+}
+
+.form-input::placeholder {
+  color: #b8b0d6;
+}
+
+/* Form Options */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.checkbox-input {
+  opacity: 0;
+  position: absolute;
+}
+
+.checkbox-label {
+  font-size: 13px;
+  color: #7b6ab8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.check-icon {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #d1c7f0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: all 0.2s;
+  background-color: #f5f2ff;
+}
+
+.checkbox-input:checked + .checkbox-label .check-icon {
+  background-color: #7b6ab8;
+  border-color: #7b6ab8;
+  color: white;
+}
+
+.forgot-password {
+  font-size: 13px;
+  color: #8a7bc8;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.forgot-password:hover {
+  color: #6a5ac4;
+  text-decoration: underline;
+}
+
+/* Auth Buttons */
+.auth-button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+  border: none;
+}
+
+.auth-button.primary {
+  background: linear-gradient(135deg, #8a7bc8 0%, #6a5ac4 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(138, 123, 200, 0.3);
+}
+
+.auth-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(138, 123, 200, 0.4);
+}
+
+.auth-button.google {
+  background: white;
+  color: #5a5a5a;
+  border: 1px solid #e0e0e0;
+}
+
+.auth-button.google:hover {
+  background: #f9f9f9;
+  border-color: #d0d0d0;
+}
+
+.auth-button.facebook {
+  background: #1877f2;
+  color: white;
+}
+
+.auth-button.facebook:hover {
+  background: #166fe5;
+}
+
+.social-icon {
+  font-size: 20px;
+}
+
+.arrow-icon {
+  transition: transform 0.3s;
+}
+
+.auth-button:hover .arrow-icon {
+  transform: translateX(3px);
+}
+
+/* Social Auth Section */
+.social-auth {
+  padding: 0 25px;
+  margin: 20px 0;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  color: #a59cc9;
+  font-size: 10px;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e0dbf5;
+  margin: 0 10px;
+}
+
+.social-buttons {
+  display: flex;
+  /* flex-direction: column; */
+  gap: 12px;
+  margin-bottom: -8%;
+}
+
+/* Footer Link */
+.auth-footer {
+  text-align: center;
+  font-size: 14px;
+  color: #7b6ab8;
+  margin: 0;
+  padding: 5px 25px 20px;
+}
+
+.auth-link {
+  color: #6a5ac4;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.auth-link:hover {
+  color: #5a4bb8;
+  text-decoration: underline;
+}

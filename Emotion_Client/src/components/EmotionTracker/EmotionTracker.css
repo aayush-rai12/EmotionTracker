@@ -1,0 +1,486 @@
+.main_emotion_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5d7c5, #9c5035);
+  padding: 20px;
+}
+
+.wrapper {
+  width: 85%;
+  max-width: 90%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.emotion_container_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-bottom: 1px; */
+}
+
+.emotion_title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #5c3317;
+}
+
+.emotion_subtitle {
+  font-size: 14px;
+  color: #404040!important;
+}
+
+.add_emotion_btn {
+  background: #5c3317;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add_emotion_btn:hover {
+  background: #462617;
+}
+
+.emotion_table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.emotion_table th {
+  background: #f2e6df;
+  padding: 6px;
+  text-align: left;
+  font-weight: bold;
+  color: #5c3317;
+}
+
+.emotion_table td {
+  padding: 12px 6px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tag {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.very_low {
+  background: #e0f7fa; /* soft cyan */
+  color: #00796b; /* teal */
+}
+
+.low {
+  background: #d4f5d4; /* soft green */
+  color: #2b7a2b;
+}
+
+.moderate {
+  background: #fff9c4; /* light yellow */
+  color: #f57f17; /* amber/orange */
+}
+
+.high {
+  background: #ffd1d1; /* light red */
+  color: #bc6060;
+}
+
+.very_high {
+  background: #ffb3b3; /* deeper red-pink */
+  color: #b71c1c; /* dark red */
+}
+
+.progress-bar {
+  width: 100px;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  position: relative;
+}
+
+.progress-bar span {
+  height: 8px;
+  border-radius: 4px;
+  position: absolute;
+  left: 0;
+}
+
+.green {
+  background: #4caf50;
+  width: 80%;
+}
+
+.orange {
+  background: #ff9800;
+  width: 50%;
+}
+
+.yellow {
+  background: #ffc107;
+  width: 60%;
+}
+
+.emotion_action_buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  background-color: #5c3317;
+  border-radius: 17px;
+  padding: 1px;
+}
+
+.emotion_edit_btn,
+.emotion_delete_btn {
+  border: none;
+  padding: 8px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+.emotion_edit_btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.emotion_edit_btn:hover {
+  background-color: #45a049;
+}
+
+.emotion_delete_btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.emotion_delete_btn:hover {
+  background-color: #d32f2f;
+}
+
+.emotion_toggle_switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+  top: 4px!important;
+}
+
+.emotion_toggle_switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.switch:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .switch {
+  background-color: #fbbf24;
+}
+
+input:checked + .switch:before {
+  transform: translateX(16px);
+}
+
+.emotion_toggle_switch .switch {
+  transition: all 0.3s ease-in-out;
+}
+
+.emotion_toggle_switch input:checked + .switch {
+  transition: all 0.3s ease-in-out;
+}
+
+.emotion_toggle_switch .switch.loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .emotion_table th,
+  .emotion_table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .emotion_action_buttons {
+    display: block;
+    text-align: center;
+  }
+
+  .emotion_edit_btn,
+  .emotion_delete_btn {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .emotion_container_header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .emotion_title {
+    font-size: 18px;
+  }
+
+  .add_emotion_btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+/* new card layout */
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 1.5%;
+  border-radius: 16px;
+}
+.emotion-card {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.9);
+  padding: 20px 24px;
+  margin: 0 auto;
+  transition: transform 0.3s ease;
+  flex: 1 1 354px;
+}
+
+.emotion-card:hover {
+  transform: translateY(-4px);
+}
+
+.emotion-quote {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #333;
+  margin-bottom: 18px;
+  padding-left: 8px;
+  border-left: 4px solid #ffd700;
+}
+
+.emotion-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  font-weight: 600;
+  color: #555;
+}
+
+.value {
+  font-weight: 500;
+  color: #222;
+}
+
+.mood-tag {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+
+.intensity-tag {
+  padding: 5px 6px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.intensity-tag.very_low {
+  background: #e0f7fa;
+  color: #00796b;
+}
+
+.intensity-tag.low {
+  background: #d4f5d4;
+  color: #2b7a2b;
+}
+
+.intensity-tag.moderate {
+  background: #fff9c4;
+  color: #f57f17;
+}
+
+.intensity-tag.high {
+  background: #ffd1d1;
+  color: #bc6060;
+}
+
+.intensity-tag.very_high {
+  background: #ffb3b3;
+  color: #b71c1c;
+}
+
+/* Footer Row */
+.footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+  gap: 8px;
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: #252323;
+  flex: 1;
+}
+
+.footer-like {
+  flex-shrink: 0;
+}
+
+.like-button {
+  background-color: #ff4d6d;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 28px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
+}
+
+.like-button:hover {
+  background-color: #e04360;
+  transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+  .info-block {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .footer-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .footer-text {
+    text-align: center;
+  }
+}
+/* heart like effect */
+.heart {
+  position: absolute;
+  bottom: 0;
+  font-size: 1.5rem;
+  opacity: 0;
+  user-select: none;
+  animation: floatHeart 5s linear forwards;
+}
+
+@keyframes floatHeart {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.6);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(15px) scale(0.9);
+    opacity: 0;
+  }
+}
+/* if no data availbale in the data then that time show message this css for that */
+.no-data-message {
+  text-align: center;
+  padding: 40px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.no-data-message p {
+  font-size: 18px;
+  color: #6c757d;
+  margin-bottom: 20px;
+}
+
+.selected-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  bottom: 0;
+  background: rgb(184, 147, 147);
+  padding: 0.3rem;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+}
+
+.delete-selected-btn {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
+.delete-selected-btn:hover {
+  background: #cc0000;
+}
