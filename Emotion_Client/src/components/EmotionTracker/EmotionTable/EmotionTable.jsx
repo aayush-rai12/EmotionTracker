@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import "./EmotionTable.css";
 import apiClient from "../../utils/apiClient";
-import { FaEdit, FaTrash  } from "react-icons/fa";
-import { useEffect } from "react";
-import { use } from "react";
-
+import { FaEdit, FaTrash } from "react-icons/fa";
 const ToggleSwitch = ({ isPublic, onToggle }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,7 +31,15 @@ const ToggleSwitch = ({ isPublic, onToggle }) => {
 
 const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
   const [selectedItems, setSelectedItems] = useState([]);
-
+  const [supportValues, setSupportValues] = useState({});
+  const Emotional_support = [
+    "Supportive",
+    "Dismissive",
+    "Neutral",
+    "Avoided",
+    "Encouraging",
+    "No One Was Involved",
+  ];
   // Edit function (will be implemented later)
   const handleEdit = (id) => {
     alert(`Edit function will be implemented for ID: ${id}`);
@@ -134,6 +139,28 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
       console.error("Failed to toggle status:", error);
     }
   };
+  const handleSupportChange = async (id, value) => {
+    try {
+      setSupportValues((prev) => ({
+        ...prev,
+        [id]: value,
+      }));
+      console.log("Updating support for ID:", id, "to value:", value);
+      //update on db server
+      const res = await apiClient.patch(`/userEmotion/updateSupport/${id}`, {
+        supportValues: value,
+      });
+
+      if (res.status === 200) {
+        console.log("Support updated!");
+      } else {
+        alert("Failed to update support");
+      }
+    } catch (error) {
+      console.error("API error:", error);
+      alert("Something went wrong while updating support");
+    }
+  };
 
   // Handle select all checkbox
   const handleSelectAll = (event) => {
@@ -183,7 +210,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
               className="delete-selected-btn"
               onClick={() => handleDelete(selectedItems)}
             >
-              Delete Selected <FaTrash/>
+              Delete Selected <FaTrash />
             </button>
           </div>
         )}
@@ -204,71 +231,94 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
             <th>Trigger Reason</th>
             <th>Date</th>
             <th>Preferred Activity</th>
-            <th>Partner Reacted</th>
+            <th>Emotional Support</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {dataArray.map((item) => (
-            console.log("Rendering item:", item._id),
-            <tr key={item._id}>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={selectedItems.includes(item._id)}
-                  onChange={() => handleSelectItem(item._id)}
-                />
-              </td>
-              <td>{item.feelings}</td>
+          {dataArray.map(
+            (item) => (
+              (
+                <tr key={item._id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(item._id)}
+                      onChange={() => handleSelectItem(item._id)}
+                    />
+                  </td>
+                  <td>{item.feelings}</td>
 
-              <td>
-                <span style={{ backgroundColor: `${item?.moodColor}50` }}
-                  className={`mood-tag ${
-                    item.mood ? item.mood.toLowerCase() : ""
-                  }`}
-                >
-                  {item.mood || "N/A"}
-                </span>
-              </td>
-              <td>
-                <span
-                  className={`intensity-tag ${item.intensity
-                    .toLowerCase()
-                    .replace(/\s/g, "_")}`}
-                >
-                  {item.intensity}
-                </span>
-              </td>
-              <td>{item.triggerReason}</td>
-              <td>{new Date().toLocaleDateString()}</td>
-              <td>{item.preferredActivity}</td>
-              <td>{item.partnerImpact}</td>
-              <td>
-                <div className="emotion_action_buttons">
-                  <button
-                    className="emotion_edit_btn"
-                    onClick={() => {
-                      handleEdit(item._id);
-                      setEditItem(item);
-                      setShowModal(true);
-                    }}
-                  >
-                    <FaEdit />
-                  </button>
-                  <ToggleSwitch
-                    isPublic={item.isPublic}
-                    onToggle={() => handleToggle(item._id)}
-                  />
-                  <button
-                    className="emotion_delete_btn"
-                    onClick={() => handleDelete(item._id)}
-                  >
-                  <FaTrash />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
+                  <td>
+                    <span
+                      style={{ backgroundColor: `${item?.moodColor}50` }}
+                      className={`mood-tag ${
+                        item.mood ? item.mood.toLowerCase() : ""
+                      }`}
+                    >
+                      {item.mood || "N/A"}
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      className={`intensity-tag ${item.intensity
+                        .toLowerCase()
+                        .replace(/\s/g, "_")}`}
+                    >
+                      {item.intensity}
+                    </span>
+                  </td>
+                  <td>{item.triggerReason}</td>
+                  <td>{new Date().toLocaleDateString()}</td>
+                  <td>{item.preferredActivity}</td>
+                  {/* <td>{item.supportValues || "N/A"}</td> */}
+                  <td>
+                    <select
+                      className="support-dropdown"
+                      value={supportValues[item._id] || ""}
+                      onChange={(e) =>
+                        handleSupportChange(item._id, e.target.value)
+                      }
+                    >
+                      <option value="">
+                        {item.Emotional_support || "Select Support"}
+                      </option>
+                      {Emotional_support.map((support, i) => (
+                        <option key={i} value={support}>
+                          {support}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+
+                  <td>
+                    <div className="emotion_action_buttons">
+                      <button
+                        className="emotion_edit_btn"
+                        onClick={() => {
+                          handleEdit(item._id);
+                          setEditItem(item);
+                          setShowModal(true);
+                        }}
+                      >
+                        <FaEdit />
+                      </button>
+                      <ToggleSwitch
+                        isPublic={item.isPublic}
+                        onToggle={() => handleToggle(item._id)}
+                      />
+                      <button
+                        className="emotion_delete_btn"
+                        onClick={() => handleDelete(item._id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              )
+            )
+          )}
         </tbody>
       </table>
     </div>
