@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import "./EmotionTracker.css";
-import apiClient from "../utils/apiClient";
+import "./EmotionTable.css";
+import apiClient from "../../utils/apiClient";
+import { FaEdit, FaTrash  } from "react-icons/fa";
 import { useEffect } from "react";
 import { use } from "react";
 
@@ -62,7 +63,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
         idArray.map(async (id) => {
           try {
             const response = await apiClient.delete(
-              `/user/deleteEmotionCard/${id}`
+              `/userEmotion/deleteEmotionCard/${id}`
             );
             return { id, success: response.status === 200 };
           } catch (error) {
@@ -144,6 +145,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
   };
   // Handle individual item selection
   const handleSelectItem = (id) => {
+    console.log("Toggling selection for ID:", id);
     setSelectedItems((prevSelected) => {
       if (prevSelected.includes(id)) {
         return prevSelected.filter((item) => item !== id);
@@ -181,7 +183,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
               className="delete-selected-btn"
               onClick={() => handleDelete(selectedItems)}
             >
-              Delete Selected <i className="fa-solid fa-trash"></i>
+              Delete Selected <FaTrash/>
             </button>
           </div>
         )}
@@ -208,7 +210,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
         </thead>
         <tbody>
           {dataArray.map((item) => (
-            console.log("Rendering item:", item),
+            console.log("Rendering item:", item._id),
             <tr key={item._id}>
               <td>
                 <input
@@ -251,7 +253,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
                       setShowModal(true);
                     }}
                   >
-                    <i className="fa-regular fa-pen-to-square"></i>
+                    <FaEdit />
                   </button>
                   <ToggleSwitch
                     isPublic={item.isPublic}
@@ -261,7 +263,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
                     className="emotion_delete_btn"
                     onClick={() => handleDelete(item._id)}
                   >
-                    <i className="fa-solid fa-trash"></i>
+                  <FaTrash />
                   </button>
                 </div>
               </td>

@@ -1,16 +1,10 @@
 // src/routes/userRoutes.js
 import express from 'express';
+import {userRegister, userLogin} from '../controllers/userController.js';
 const router = express.Router();
 
-router.post('/register', (req, res) => {
-  const newUser = req.body;
-  // Save user logic
-  res.status(201).send(`User ${newUser.name} created`);
-});
+router.post('/userRegister', userRegister);
 
-router.get('/profile', (req, res) => {
-  // Return user profile
-  res.send('User profile data');
-});
+router.post('/users', userLogin);
 
 export default router;

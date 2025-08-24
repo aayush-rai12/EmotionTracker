@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import "./EmotionTracker.css";
+import "./EmotionCard.css";
 
 function EmotionCreatedCard({data}) {
     const [hoverColor, setHoverColor] = useState(null);

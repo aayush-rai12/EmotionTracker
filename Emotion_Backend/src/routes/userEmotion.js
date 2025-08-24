@@ -1,16 +1,14 @@
 import express from 'express';
+import {saveUserEmotion, getUserEmotions, updateEmotionCard, deleteEmotionCard} from '../controllers/userEmoController.js';
 
 const router = express.Router();
 
-router.get('/userEmotion', (req, res) => {
-  res.send('List of users');
-});
+router.get('/getUserEmotion/:user_Id', getUserEmotions);
 
-router.post('/saveUserEmotion', (req, res) => {
-  const newUser = req.body;
-  console.log('New user created:', newUser);
-  // Logic to save the user in the database
-  res.status(201).send(`User ${newUser.name} created`);
-});
+router.post('/saveUserEmotion', saveUserEmotion);
+
+router.patch('/updateEmotionCard/:id', updateEmotionCard);
+
+router.delete('/deleteEmotionCard/:id', deleteEmotionCard)
 
 export default router;

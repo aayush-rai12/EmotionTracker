@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const mongoDB = process.env.MONGO_URL_local || "mongodb://localhost:27017/EmotionTrackerDB";
+const mongoDB = process.env.MONGO_URL_local;
 
 mongoose.connect(mongoDB)
 

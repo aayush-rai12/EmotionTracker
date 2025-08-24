@@ -11,7 +11,7 @@
 .modal-header {
   border-bottom: none;
   padding: 30px 30px 20px;
-  background: linear-gradient(135deg, #8a7bc8 0%, #6a5ac4 100%);
+  /* background: linear-gradient(135deg, #8a7bc8 0%, #6a5ac4 100%); */
   color: white;
   text-align: center;
   position: relative;
@@ -270,4 +270,17 @@
 .auth-link:hover {
   color: #5a4bb8;
   text-decoration: underline;
+}
+.success-message {
+  color: #10b981;
+  margin: 5px 2px -16px 0px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.auth-button.primary.success-style {
+  background: linear-gradient(135deg, #8a7bc8 0%, #5ac475 100%);
+  color: #07ff00;
+  border: none;
+  transition: background 0.3s ease, color 0.3s ease;
 }

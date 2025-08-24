@@ -5,13 +5,15 @@ import "./emotionModal.css";
 import apiClient from "../../utils/apiClient";
 
 const moods = [
-  { label: "Happy", emoji: "😊", color: "#fde2e2" },
-  { label: "Sad", emoji: "😢", color: "#fff3cd" },
-  { label: "Angry", emoji: "😡", color: "#f8d7da" },
-  { label: "Calm", emoji: "😌", color: "#d4edda" },
-  { label: "Excited", emoji: "🤩", color: "#e0c3fc" },
-  { label: "Loved", emoji: "❤️", color: "#c9184a" },//fcd5ce
-  { label: "Celebrating", emoji: "🥳", color: "#d1f7ff" },
+  { label: "Happy", emoji: "😊", color: "#FF9E6D" },
+  { label: "Sad", emoji: "😢", color: "#6DA9FF" },
+  { label: "Angry", emoji: "😡", color: "#FF6B6B" },
+  { label: "Calm", emoji: "😌", color: "#6DDBAA" },
+  { label: "Excited", emoji: "🤩", color: "#FF6BB5" },
+  { label: "Loved", emoji: "❤️", color: "#FF6B9D" },
+  { label: "Celebrating", emoji: "🥳", color: "#FFCE6D" },
+  { label: "Anxious", emoji: "😰", color: "#9D6DFF" },
+  { label: "Peaceful", emoji: "🧘", color: "#6DDBD4" },
 ];
 
 const triggerOptions = [
@@ -41,7 +43,7 @@ const triggerOptions = [
     triggers: [
       "Papa ki daant",
       "Maa ka pyar",
-      "Friend’s unexpected support",
+      "Friend's unexpected support",
       "Sibling teasing you playfully",
       "When a friend shared your happiness",
     ],
@@ -78,6 +80,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
   const [intensity, setIntensity] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [customTrigger, setCustomTrigger] = useState("");
+  const [trigger, setTrigger] = useState("");
   const [preferredActivity, setPreferredActivity] = useState("");
   const [partnerReaction, setPartnerReaction] = useState("");
   const [loading, setLoading] = useState(false);
@@ -118,7 +121,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
   }, [show]);
 
   const handleSubmit = async () => {
-    const userId = JSON.parse(localStorage.getItem("user"))?.user_Id;
+    const userId = localStorage.getItem("user_id");
     if (!userId) {
       alert("User not authenticated");
       return;
@@ -137,7 +140,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
       user_Id: userId,
       feelings: feeling.trim(),
       mood: mood?.label || "",
-      moodColor: mood?.color || "#fcb1b1",
+      moodColor: mood?.color || "#FF9E6D",
       intensity,
       triggerReason,
       preferredActivity: preferredActivity.trim(),
@@ -148,15 +151,14 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
       setLoading(true);
       let response;
       if (editItem?._id) {
-        response = await apiClient.patch(
-          `/user/updateEmotionCard/${editItem._id}`,
-          { ...emotionData, _id: editItem._id }
-        );
+        alert("Editing existing feeling...");
+        response = await apiClient.patch(`/userEmotion/updateEmotionCard/${editItem._id}`,{ ...emotionData, _id: editItem._id });
       } else {
-        response = await apiClient.post("/user/saveEmotionData", emotionData);
+        response = await apiClient.post("/userEmotion/saveUserEmotion",emotionData);
       }
-
+      console.log("Feeling saved successfully!4567890", response.status);
       if (response.status === 200) {
+        alert("Feeling saved successfully!"); 
         await fetchEmotionData();
         handleClose();
       }
@@ -172,8 +174,10 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
     <div
       className="feel_bg-gradient"
       style={{
-        background: mood?.color || "#fcb1b1",
-        transition: "background 0.5s ease-in-out",
+        background: mood?.color
+          ? `linear-gradient(135deg, ${mood.color}20 0%, #ffffff 100%)`
+          : "rgba(0, 0, 0, 0.5)",
+        transition: "background 0.3s ease-in-out",
       }}
     >
       <Modal
@@ -183,18 +187,40 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
         className="custom_modal"
         size="lg"
         style={{
-          backgroundColor: `${mood?.color}20`,
+          backgroundColor: mood
+            ? `0 10px 30px ${mood.color}40`
+            : "0 10px 30px rgba(0, 0, 0, 0.15)",
           boxShadow: mood
-            ? `0px 4px 20px ${mood.color}80`
-            : "0px 4px 10px rgba(0, 0, 0, 0.1)",
-          transition: "all 0.5s ease-in-out",
+            ? `0 10px 30px ${mood.color}40`
+            : "0 10px 30px rgba(0, 0, 0, 0.15)",
+          transition: "all 0.3s ease-in-out",
+          border: "none",
+          borderRadius: "16px",
+          overflow: "hidden",
         }}
       >
         <Modal.Header
           closeButton
-          style={{ backgroundColor: `${mood?.color}20` }}
+          style={{
+            backgroundColor: mood?.color || "#fcb1b1",
+            transition: "all 0.3s ease-in-out",
+            position: "relative",
+            justifyContent: "center",
+          }}
         >
-          <Modal.Title>Share Your Feeling</Modal.Title>
+          <Modal.Title
+            style={{
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+              fontWeight: 600,
+              color: "black",
+              textShadow: "0 1px 2px rgba(0,0,0,0.2)",
+              pointerEvents: "none", // so close button is still clickable
+            }}
+          >
+            {mood?.emoji} Share Your Feeling
+          </Modal.Title>
         </Modal.Header>
 
         <Modal.Body style={{ padding: 0 }} className="emotionModal_body">
@@ -206,7 +232,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
                   <div className="emotionModal_input_container">
                     <textarea
                       className="emotionModal_textarea"
-                      placeholder="Share your feeling..."
+                      placeholder="What's on your mind? Share your feelings..."
                       value={feeling}
                       onChange={(e) => setFeeling(e.target.value)}
                       maxLength={maxChars}
@@ -221,6 +247,12 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
                 {/* Mood */}
                 <Form.Group>
                   <div className="emoji-section">
+                    <h5
+                      className="section-title"
+                      style={{ color: mood?.color || "black" }}
+                    >
+                      How are you feeling?
+                    </h5>
                     <div className="mood-selector" ref={emojiContainerRef}>
                       {moods.map((item) => (
                         <button
@@ -234,7 +266,11 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
                             backgroundColor:
                               mood?.label === item.label
                                 ? item.color
-                                : "#f0f0f0",
+                                : "#f8f9fa",
+                            transform:
+                              mood?.label === item.label
+                                ? "scale(1.1)"
+                                : "scale(1)",
                           }}
                           onClick={() => setMood(item)}
                         >
@@ -320,7 +356,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
                             right: "10px",
                             cursor: "pointer",
                             fontSize: "1.1rem",
-                            color: "#555",
+                            color: "#6c757d",
                           }}
                           onClick={() => {
                             setSelectedOption("");
@@ -333,23 +369,6 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
                         </span>
                       )}
                     </Form.Group>
-
-                    {selectedOption === "Custom" && (
-                      <Form.Group className="position-relative mt-2">
-                       
-                        <span
-                          className="position-absolute top-50 translate-middle-y"
-                          style={{ right: "10px", cursor: "pointer" }}
-                          onClick={() => {
-                            setSelectedOption("");
-                            setCustomTrigger("");
-                          }}
-                          title="Back to list"
-                        >
-                      
-                        </span>
-                      </Form.Group>
-                    )}
                   </Col>
                 </Row>
 
@@ -366,10 +385,10 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
                     </FloatingLabel>
                   </Col>
                   <Col md={6}>
-                    <FloatingLabel label="Partner Reaction">
+                    <FloatingLabel label="Any Reaction">
                       <Form.Control
                         type="text"
-                        placeholder="How did your partner react?"
+                        placeholder="How did you react?"
                         value={partnerReaction}
                         onChange={(e) => setPartnerReaction(e.target.value)}
                       />
@@ -381,12 +400,35 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
           </div>
         </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+        <Modal.Footer
+          style={{
+            backgroundColor: "#f8f9fa",
+            borderTop: "1px solid #e9ecef",
+            padding: "15px 25px 20px",
+          }}
+        >
+          <Button
+            variant="outline-secondary"
+            onClick={handleClose}
+            style={{
+              border: "2px solid #6c757d",
+              color: "#000000ff",
+              fontWeight: "600",
+            }}
+          >
             Close
           </Button>
-          <Button variant="primary" onClick={handleSubmit} disabled={loading}>
-            {loading ? "Saving..." : "Save"}
+          <Button
+            variant="primary"
+            onClick={handleSubmit}
+            disabled={loading}
+            style={{
+              backgroundColor: mood?.color || "#FF9E6D",
+              border: "none",
+              fontWeight: "600",
+            }}
+          >
+            {loading ? "Saving..." : "Save Feeling"}
           </Button>
         </Modal.Footer>
       </Modal>
