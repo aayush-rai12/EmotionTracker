@@ -220,3 +220,31 @@ input:checked + .switch:before {
     margin: 5px 0;
   }
 }
+
+/* Emotion Support Dropdown Styling */
+.support-dropdown {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.support-dropdown:focus {
+  outline: none;
+  border-color: #007bff;
+  background-color: #fff;
+}
+
+.support-dropdown:hover {
+  border-color: #999;
+}
+
+.support-dropdown option {
+  background-color: #fff;
+  color: #671616;
+}

@@ -113,3 +113,30 @@ export const deleteEmotionCard = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const updateSupport = async (req, res) => {
+  try {
+    const _id = req.params.id //this is the card id;
+    const {supportValues} = req.body;
+    console.log("Updating support for card ID:", _id, "New support value:", supportValues);
+    // Validate id
+    if (!_id) {
+      return res.status(400).json({ message: "Invalid emotion card ID!" });
+    }
+    // Update the support field of the emotion card
+    const updatedCard = await usersEmotion.findByIdAndUpdate(_id, { Emotional_support:supportValues }, { new: true });
+    if (!updatedCard) {
+      return res.status(404).json({ message: "Emotion card not found!" });
+    }
+    console.log("Updated card:", updatedCard);
+    res.status(200).json({
+      success: true,
+      message: "Support updated successfully",
+      updatedCard,
+    });
+  }
+  catch (error) {
+    console.error("Error updating support:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}

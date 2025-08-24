@@ -23,9 +23,9 @@ const emotionTableSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    partnerReacted: {
-      type: Boolean,
-      default: false,
+    Emotional_support: {
+      type: String,
+      default: 'N/A',
     },
     intensity: {
       type: String,

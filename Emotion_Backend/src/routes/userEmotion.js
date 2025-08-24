@@ -1,5 +1,5 @@
 import express from 'express';
-import {saveUserEmotion, getUserEmotions, updateEmotionCard, deleteEmotionCard} from '../controllers/userEmoController.js';
+import {saveUserEmotion, getUserEmotions, updateEmotionCard, deleteEmotionCard, updateSupport} from '../controllers/userEmoController.js';
 
 const router = express.Router();
 
@@ -10,5 +10,7 @@ router.post('/saveUserEmotion', saveUserEmotion);
 router.patch('/updateEmotionCard/:id', updateEmotionCard);
 
 router.delete('/deleteEmotionCard/:id', deleteEmotionCard)
+
+router.patch('/updateSupport/:id', updateSupport);
 
 export default router;
