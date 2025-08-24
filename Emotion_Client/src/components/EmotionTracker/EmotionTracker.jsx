@@ -49,15 +49,18 @@ const EmotionTracker = () => {
 
   // Filter data based on time selection
   const filteredData = () => {
+
     const now = new Date();
     if (filter === "week") {
+      console.log("Filtering for past week", data);
       const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       return data.filter(item => new Date(item.createdAt) >= oneWeekAgo);
     } else if (filter === "month") {
       const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
       return data.filter(item => new Date(item.createdAt) >= oneMonthAgo);
     }
-    return data;
+    // return data;
+    return data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   };
 
   const handleLogout = () => {
@@ -187,6 +190,13 @@ const EmotionTracker = () => {
               <option value="month">Past Month</option>
             </select>
           </div>
+        </div>
+
+        {/* Info based on filter */}
+        <div className="filter-summary">
+          <p>
+            Showing <strong>{filteredData().length}</strong> entries {filter !== 'all' && `from the past ${filter}`}
+          </p>
         </div>
 
         {data.length === 0 ? (

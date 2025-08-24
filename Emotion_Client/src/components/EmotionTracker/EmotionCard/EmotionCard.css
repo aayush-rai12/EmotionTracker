@@ -63,11 +63,12 @@
 }
 
 .intensity-tag {
-  padding: 5px 6px;
+  padding: 6px 10px;
   border-radius: 12px;
   font-size: 0.9rem;
   font-weight: bold;
   text-transform: capitalize;
+  display: block ruby;
 }
 
 .intensity-tag.very_low {

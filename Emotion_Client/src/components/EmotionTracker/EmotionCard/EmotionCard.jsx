@@ -126,7 +126,7 @@ function EmotionCreatedCard({data}) {
                   </button>
                 </div>
                 <span className="footer-text" style={{ textAlign: "right" }}>
-                  Liked by: You & other 8
+                  Liked by: You!
                 </span>
               </div>
             </div>
