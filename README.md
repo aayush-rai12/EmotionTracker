@@ -45,7 +45,7 @@ A comprehensive web application that helps users track, manage, and analyze thei
 ![Emotion Modal](https://github.com/user-attachments/assets/d0754b61-6770-4a1a-b848-4b766d615d5f)
 
 ### Emotion Card with Like Button
-![Emotion Card](https://github.com/user-attachments/assets/202e1468-986d-4e03-8680-8c1fa6efc404)
+<img width="1919" height="1022" alt="image" src="https://github.com/user-attachments/assets/6716431e-887c-4661-96c6-4329d286a1c8" />
 
 ### Table View
 ![Table View](https://github.com/user-attachments/assets/8a706f31-4bcb-4be1-9918-3baaebc99baf)
