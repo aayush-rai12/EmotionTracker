@@ -1,0 +1,76 @@
+# Emotion Tracker
+
+A comprehensive web application that helps users track, manage, and analyze their emotional states over time. Built with a modern MERN stack and JWT authentication for security.
+
+![Emotion Tracker Home Page](https://github.com/user-attachments/assets/4e48fe98-b719-446b-968e-cd6ba61ee9a0)
+
+## Features
+
+### 🔐 User Authentication
+- **Secure Login System**: JWT-based authentication with protected routes
+- **User Registration**: Secure sign-up process with password hashing
+- **Session Management**: Token-based user sessions( in-progress) 
+
+### 📊 Emotion Management
+- **Create Emotion Entries**: Add new emotional experiences with detailed information
+- **Edit Existing Entries**: Modify previous emotion records
+- **Delete Entries**: Remove unwanted or incorrect entries
+- **Multiple Delete**: Batch delete functionality for efficient management
+
+### 👁️ Multiple View Options
+- **Card View**: Visual representation of emotions with all details
+- **Table View**: Structured format for data management and analysis
+- **Like Feature**: Heart-shaped button
+
+### 🎨 User Interface
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Modal Forms**: Clean pop-up forms for data entry without page navigation
+- **Intuitive Navigation**: Easy-to-use interface for all operations
+
+## Screenshots
+
+### Home Page
+![Home Page](https://github.com/user-attachments/assets/4e48fe98-b719-446b-968e-cd6ba61ee9a0)
+
+### Login Modal
+![Login Modal](https://github.com/user-attachments/assets/4cfd1b39-6474-4fde-8995-e870788c6549)
+
+### Registration Page
+![Registration Page](https://github.com/user-attachments/assets/3e305657-ff62-4dc0-975b-e18973a90bb3)
+
+### Main Dashboard
+![Main Dashboard](https://github.com/user-attachments/assets/3ef26043-7ee7-409c-837c-43ede26a1eaa)
+
+### Emotion Entry Modal
+![Emotion Modal](https://github.com/user-attachments/assets/d0754b61-6770-4a1a-b848-4b766d615d5f)
+
+### Emotion Card with Like Button
+![Emotion Card](https://github.com/user-attachments/assets/202e1468-986d-4e03-8680-8c1fa6efc404)
+
+### Table View
+![Table View](https://github.com/user-attachments/assets/8a706f31-4bcb-4be1-9918-3baaebc99baf)
+
+### Multiple Delete Feature
+![Multiple Delete](https://github.com/user-attachments/assets/4c0a758c-db22-4cc7-b9bd-1dd6ec36d1a6)
+
+## Technology Stack
+
+### Frontend
+- **React**
+- **HTML5/CSS3**
+- **JavaScript (ES6+)**
+
+### Backend
+- **Node.js**
+- **Express**
+- **MongoDB**
+
+### Authentication & Security
+- **JWT (JSON Web Tokens)**: Secure user authentication
+- **bcrypt**: Password hashing
+
+### Additional Libraries
+- **Axios**: HTTP client for API calls
+- **React Router**: Navigation and routing
+
+
