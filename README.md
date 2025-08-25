@@ -39,7 +39,7 @@ A comprehensive web application that helps users track, manage, and analyze thei
 ![Registration Page](https://github.com/user-attachments/assets/3e305657-ff62-4dc0-975b-e18973a90bb3)
 
 ### Main Dashboard
-![Main Dashboard](https://github.com/user-attachments/assets/3ef26043-7ee7-409c-837c-43ede26a1eaa)
+<img width="1919" height="1018" alt="image" src="https://github.com/user-attachments/assets/e4b74a91-f8b0-4d9c-8ce4-9347e3fc97bc" />
 
 ### Emotion Entry Modal
 ![Emotion Modal](https://github.com/user-attachments/assets/d0754b61-6770-4a1a-b848-4b766d615d5f)
@@ -48,10 +48,10 @@ A comprehensive web application that helps users track, manage, and analyze thei
 <img width="1919" height="1022" alt="image" src="https://github.com/user-attachments/assets/6716431e-887c-4661-96c6-4329d286a1c8" />
 
 ### Table View
-![Table View](https://github.com/user-attachments/assets/8a706f31-4bcb-4be1-9918-3baaebc99baf)
+<img width="1919" height="1011" alt="image" src="https://github.com/user-attachments/assets/ea9d797c-baa0-47e6-9461-c97da95a4810" />
 
 ### Multiple Delete Feature
-![Multiple Delete](https://github.com/user-attachments/assets/4c0a758c-db22-4cc7-b9bd-1dd6ec36d1a6)
+<img width="1919" height="1019" alt="image" src="https://github.com/user-attachments/assets/cae10973-691c-495d-9b32-6d1314262c7e" />
 
 ## Technology Stack
 
