@@ -252,6 +252,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
                       style={{ color: mood?.color || "black" }}
                     >
                       How are you feeling?
+                      <hr style={{margin:"2% 30%"}}/>
                     </h5>
                     <div className="mood-selector" ref={emojiContainerRef}>
                       {moods.map((item) => (
@@ -281,7 +282,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
                   </div>
                 </Form.Group>
 
-                {/* Intensity + Trigger */}
+                {/* Intensity */}
                 <Row>
                   <Col md={6}>
                     <Form.Group>
@@ -348,7 +349,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
                         )}
                       </FloatingLabel>
 
-                      {/* 🔙 Back Arrow Button */}
+                      {/* Back Arrow Button */}
                       {selectedOption === "Custom" && (
                         <span
                           className="position-absolute top-50 translate-middle-y"
@@ -411,7 +412,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
             variant="outline-secondary"
             onClick={handleClose}
             style={{
-              border: "2px solid #6c757d",
+              border: "1.5px solid #6c757d",
               color: "#000000ff",
               fontWeight: "600",
             }}
@@ -419,12 +420,13 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
             Close
           </Button>
           <Button
-            variant="primary"
+            className="mood-button"
+            // variant="primary"
             onClick={handleSubmit}
             disabled={loading}
             style={{
-              backgroundColor: mood?.color || "#FF9E6D",
-              border: "none",
+              backgroundColor: mood?.color || "#100f0eff",
+              border: "1.5px solid black",
               fontWeight: "600",
             }}
           >

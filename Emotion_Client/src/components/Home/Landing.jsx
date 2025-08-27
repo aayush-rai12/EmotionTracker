@@ -63,7 +63,7 @@ const Landing = () => {
             </p>
             <div className="user">
               <div className="avatar"></div>
-              <span>Sarah K., 3 months user</span>
+              <span>Aayush Rai, 3 months user</span>
             </div>
           </div>
         </div>

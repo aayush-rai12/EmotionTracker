@@ -83,8 +83,8 @@ const EmotionTracker = () => {
           {/* Personalized Greeting */}
         </div>
           <div className="user-greeting">
-            <span className="greeting-text">{greeting}</span>
-            <span className="user-name">{user?.Name || "User"}</span>
+            <span className="greeting-text">Hi {greeting}</span>
+            <span className="user-name">{user?.Name || "User"}!</span>
             <span className="greeting-emoji">
               {greeting === "Good Morning" ? "☀️" : greeting === "Good Afternoon" ? "🌞" : "🌙"}
             </span>

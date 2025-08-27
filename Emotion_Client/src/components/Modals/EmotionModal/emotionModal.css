@@ -130,7 +130,7 @@
   border: none;
   font-size: 16px;
   padding: 0;
-  min-height: 120px;
+  min-height: 80px;
   font-family: inherit;
 }
 
@@ -310,4 +310,8 @@
 .form-select:focus {
   outline: 2px solid #FF9E6D;
   outline-offset: 2px;
+}
+.mood-button :hover{
+  color: black!important;
+
 }
