@@ -21,10 +21,6 @@ const userSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-  rememberMe: {
-    type: Boolean,
-    default: false
-  },
   profileImage: {
     type: String,
     default: null,

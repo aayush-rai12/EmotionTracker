@@ -3,6 +3,8 @@ import { Modal, Button, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import { Clipboard } from "lucide-react";
 import "./emotionModal.css";
 import apiClient from "../../utils/apiClient";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";  
 
 const moods = [
   { label: "Happy", emoji: "😊", color: "#FF9E6D" },
@@ -151,16 +153,17 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
       setLoading(true);
       let response;
       if (editItem?._id) {
-        alert("Editing existing feeling...");
+        // alert("Editing existing feeling...");
         response = await apiClient.patch(`/userEmotion/updateEmotionCard/${editItem._id}`,{ ...emotionData, _id: editItem._id });
       } else {
         response = await apiClient.post("/userEmotion/saveUserEmotion",emotionData);
       }
-      console.log("Feeling saved successfully!4567890", response.status);
       if (response.status === 200) {
-        alert("Feeling saved successfully!"); 
+        toast.success(`Feeling ${editItem?._id ? "updated" : "saved"} successfully!`);
         await fetchEmotionData();
         handleClose();
+      } else {
+        toast.error("Failed to save feeling. Please try again.");
       }
     } catch (error) {
       console.error("Save failed:", error.response?.data || error.message);

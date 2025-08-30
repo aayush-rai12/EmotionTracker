@@ -5,6 +5,7 @@ import EmotionModal from "../Modals/EmotionModal/emotionModal";
 import EmotionCreatedCard from "./EmotionCard/EmotionCard";
 import apiClient from "../utils/apiClient";
 import "./EmotionTracker.css";
+import { useNavigate } from "react-router-dom";
 
 const EmotionTracker = () => {
   const [showModal, setShowModal] = useState(false);
@@ -14,6 +15,7 @@ const EmotionTracker = () => {
   const [filter, setFilter] = useState("all");
   const [user, setUser] = useState(null);
   const [greeting, setGreeting] = useState("");
+  const navigate = useNavigate();
 
   // Get user data from localStorage and set greeting
   useEffect(() => {
@@ -66,8 +68,8 @@ const EmotionTracker = () => {
   const handleLogout = () => {
     localStorage.removeItem("userDetails");
     localStorage.removeItem("user_id");
-    window.location.href = "/";
-  };
+    localStorage.removeItem("token"); 
+    navigate("/");  };
 
   return (
     <div className="emotion-tracker-container">

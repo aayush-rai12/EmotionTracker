@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "./EmotionTable.css";
 import apiClient from "../../utils/apiClient";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";  
+
 const ToggleSwitch = ({ isPublic, onToggle }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,9 +43,10 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
     "Encouraging",
     "No One Was Involved",
   ];
+
   // Edit function (will be implemented later)
   const handleEdit = (id) => {
-    alert(`Edit function will be implemented for ID: ${id}`);
+    // alert(`Edit function will be implemented for ID: ${id}`);
     const entry = data.find((item) => item._id === id);
     if (entry) {
       console.log("Editing entry:", entry);
@@ -70,6 +74,14 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
             const response = await apiClient.delete(
               `/userEmotion/deleteEmotionCard/${id}`
             );
+
+            // Ensure correct response is used
+            if (response.status === 200) {
+              toast.success("Emotion deleted successfully!");  // Success Toast
+            } else {
+              toast.error("Failed to delete emotion.");
+            }
+
             return { id, success: response.status === 200 };
           } catch (error) {
             console.error(`Failed to delete item ${id}:`, error);
@@ -89,8 +101,17 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
         setSelectedItems((prevSelected) =>
           prevSelected.filter((id) => !successfulDeletes.includes(id))
         );
-        console.log(
-          `Successfully deleted ${successfulDeletes.length} item(s).`
+        toast.success(
+          `Successfully deleted ${successfulDeletes.length} item(s).`,
+          {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
         );
       }
 
@@ -117,7 +138,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
         )
       );
 
-      // update here card status is visible or not
+      // Update here card status is visible or not
       const response = await apiClient.patch(
         `/user/toggleEmotionStatus/${id}`,
         {
@@ -139,6 +160,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
       console.error("Failed to toggle status:", error);
     }
   };
+
   const handleSupportChange = async (id, value) => {
     try {
       setSupportValues((prev) => ({
@@ -146,12 +168,21 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
         [id]: value,
       }));
       console.log("Updating support for ID:", id, "to value:", value);
-      //update on db server
+      // Update on db server
       const res = await apiClient.patch(`/userEmotion/updateSupport/${id}`, {
         supportValues: value,
       });
 
       if (res.status === 200) {
+        toast.success("Emotional Support status updated successfully!", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         console.log("Support updated!");
       } else {
         alert("Failed to update support");
@@ -170,9 +201,9 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
       setSelectedItems([]);
     }
   };
+
   // Handle individual item selection
   const handleSelectItem = (id) => {
-    console.log("Toggling selection for ID:", id);
     setSelectedItems((prevSelected) => {
       if (prevSelected.includes(id)) {
         return prevSelected.filter((item) => item !== id);
@@ -181,6 +212,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
       }
     });
   };
+
   const dataArray = Array.isArray(data) ? data : Object.values(data);
 
   // Ensure data is an array
@@ -197,8 +229,6 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
       </div>
     );
   }
-
-  // Update the bulk delete handler
 
   return (
     <div className="table-responsive">
@@ -236,89 +266,74 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
           </tr>
         </thead>
         <tbody>
-          {dataArray.map(
-            (item) => (
-              (
-                <tr key={item._id}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.includes(item._id)}
-                      onChange={() => handleSelectItem(item._id)}
-                    />
-                  </td>
-                  <td>{item.feelings}</td>
-
-                  <td>
-                    <span
-                      style={{ backgroundColor: `${item?.moodColor}50` }}
-                      className={`mood-tag ${
-                        item.mood ? item.mood.toLowerCase() : ""
-                      }`}
-                    >
-                      {item.mood || "N/A"}
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                      className={`intensity-tag ${item.intensity
-                        .toLowerCase()
-                        .replace(/\s/g, "_")}`}
-                    >
-                      {item.intensity}
-                    </span>
-                  </td>
-                  <td>{item.triggerReason}</td>
-                  <td>{new Date().toLocaleDateString()}</td>
-                  <td>{item.preferredActivity}</td>
-                  {/* <td>{item.supportValues || "N/A"}</td> */}
-                  <td>
-                    <select
-                      className="support-dropdown"
-                      value={supportValues[item._id] || ""}
-                      onChange={(e) =>
-                        handleSupportChange(item._id, e.target.value)
-                      }
-                    >
-                      <option value="">
-                        {item.Emotional_support || "Select Support"}
-                      </option>
-                      {Emotional_support.map((support, i) => (
-                        <option key={i} value={support}>
-                          {support}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-
-                  <td>
-                    <div className="emotion_action_buttons">
-                      <button
-                        className="emotion_edit_btn"
-                        onClick={() => {
-                          handleEdit(item._id);
-                          setEditItem(item);
-                          setShowModal(true);
-                        }}
-                      >
-                        <FaEdit />
-                      </button>
-                      <ToggleSwitch
-                        isPublic={item.isPublic}
-                        onToggle={() => handleToggle(item._id)}
-                      />
-                      <button
-                        className="emotion_delete_btn"
-                        onClick={() => handleDelete(item._id)}
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )
-            )
-          )}
+          {dataArray.map((item) => (
+            <tr key={item._id}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedItems.includes(item._id)}
+                  onChange={() => handleSelectItem(item._id)}
+                />
+              </td>
+              <td>{item.feelings}</td>
+              <td>
+                <span
+                  style={{ backgroundColor: `${item?.moodColor}50` }}
+                  className={`mood-tag ${item.mood ? item.mood.toLowerCase() : ""}`}
+                >
+                  {item.mood || "N/A"}
+                </span>
+              </td>
+              <td>
+                <span className={`intensity-tag ${item.intensity.toLowerCase().replace(/\s/g, "_")}`}>
+                  {item.intensity}
+                </span>
+              </td>
+              <td>{item.triggerReason}</td>
+              <td>{new Date().toLocaleDateString()}</td>
+              <td>{item.preferredActivity}</td>
+              <td>
+                <select
+                  className="support-dropdown"
+                  value={supportValues[item._id] || ""}
+                  onChange={(e) => handleSupportChange(item._id, e.target.value)}
+                >
+                  <option value="">
+                    {item.Emotional_support || "Select Support"}
+                  </option>
+                  {Emotional_support.map((support, i) => (
+                    <option key={i} value={support}>
+                      {support}
+                    </option>
+                  ))}
+                </select>
+              </td>
+              <td>
+                <div className="emotion_action_buttons">
+                  <button
+                    className="emotion_edit_btn"
+                    onClick={() => {
+                      handleEdit(item._id);
+                      setEditItem(item);
+                      setShowModal(true);
+                    }}
+                  >
+                    <FaEdit />
+                  </button>
+                  <ToggleSwitch
+                    isPublic={item.isPublic}
+                    onToggle={() => handleToggle(item._id)}
+                  />
+                  <button
+                    className="emotion_delete_btn"
+                    onClick={() => handleDelete(item._id)}
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

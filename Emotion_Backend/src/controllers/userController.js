@@ -1,7 +1,8 @@
 import User from '../models/User.js';
 import { uploadImage, deleteImage } from '../config/cloudinary.js'; 
 import bcrypt from 'bcryptjs';
-
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 export const userRegister = async (req, res) => {
   try{
     const { name, email, password, location, profileImage } = req.body;
@@ -22,13 +23,12 @@ export const userRegister = async (req, res) => {
             }
     }
     // Hash the password
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     // Create a new user
-    console.log('Creating new user with name:', uploaded_profile_Image);
     const newUser = new User({
       name: name.charAt(0).toUpperCase() + name.slice(1).toLowerCase(),
       email,
-      password,
+      password: hashedPassword,
       location,
       profileImage: uploaded_profile_Image || null,
     }); 
@@ -42,8 +42,6 @@ export const userRegister = async (req, res) => {
       user: {
         Name: newUser.name,
         email: newUser.email,
-        // location: newUser.location,
-        // profileImage: newUser.profileImage,
       },
     });
   }catch (error) {
@@ -66,8 +64,9 @@ export const userLogin = async (req, res) => {
     }
 
     //Compare password
-    // const isMatch = await bcrypt.compare(password, user.password);
-    if (password !== user.password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
@@ -113,21 +112,22 @@ export const userLogin = async (req, res) => {
     await user.save();
 
     //Generate JWT token
-    // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    //   expiresIn: "1d", // 1 day validity
-    // });
+    const token = jwt.sign({ id: user._id,name: user.name, project: "EmoTacker"}, process.env.JWT_SECRET, {
+      expiresIn: rememberMe ? "7d" : "1d", 
+    });
+    console.log("Generated JWT:", token);
 
     // Return response
     return res.status(200).json({
       success: true,
       message: "User logged in successfully",
+      token,
       user: {
         user_Id: user._id,
         Name: user.name,
         email: user.email,
         profileImage: user.profileImage,
         location: user.location,  
-        // token,
         streak: user.currentStreak,
         highestStreak: user.highestStreak,
         milestoneMessage,

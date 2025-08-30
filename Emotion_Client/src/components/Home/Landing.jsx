@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+// import { useLocation } from "react-router-dom";  <-- remove if unused
 import "./Landing.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import LoginModal from "../Modals/LoginModal/LoginModal";
+import { toast } from "react-toastify";
 
 const Landing = () => {
+  const [show, setShow] = useState(false);
+
   useEffect(() => {
     AOS.init({
       duration: 1200,
@@ -13,30 +17,45 @@ const Landing = () => {
     });
   }, []);
 
-  // Enhanced emotion data with color psychology
-  const emotions = [
-    { name: "Joy", emoji: "😊", color: "#FFD166" }, // Yellow - happiness
-    { name: "Sadness", emoji: "😢", color: "#6A8EAE" }, // Blue - calm/trust
-    { name: "Anger", emoji: "😠", color: "#EF476F" }, // Red - passion/strength
-    { name: "Anxiety", emoji: "😰", color: "#A37A74" }, // Brown - stability
-    { name: "Excitement", emoji: "🤩", color: "#FF9A47" }, // Orange - friendly
-    { name: "Peace", emoji: "😌", color: "#06D6A0" }, // Green - growth
-  ];
+  useEffect(() => {
+    const msg = localStorage.getItem("sessionExpiredMessage");
+    if (msg) {
+      toast.warn(msg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      localStorage.removeItem("sessionExpiredMessage");
+    }
+  }, []);
 
-  const [show, setShow] = React.useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const emotions = [
+    { name: "Joy", emoji: "😊", color: "#FFD166" },
+    { name: "Sadness", emoji: "😢", color: "#6A8EAE" },
+    { name: "Anger", emoji: "😠", color: "#EF476F" },
+    { name: "Anxiety", emoji: "😰", color: "#A37A74" },
+    { name: "Excitement", emoji: "🤩", color: "#FF9A47" },
+    { name: "Peace", emoji: "😌", color: "#06D6A0" },
+  ];
+
   return (
     <div className="emotion-landing">
-      {/* Emotional background elements */}
+      {/* Background Decorations */}
       <div className="emotion-bg">
         <div className="bg-circle joy"></div>
         <div className="bg-circle calm"></div>
         <div className="bg-circle passion"></div>
       </div>
-      {/* Main content */}
+
+      {/* Main Content */}
       <div className="landing-container">
-        {/* Left content */}
+        {/* Left Content */}
         <div className="landing-content" data-aos="fade-right">
           <h1>
             <span className="title-gradient">Listen to your heart</span>
@@ -68,7 +87,7 @@ const Landing = () => {
           </div>
         </div>
 
-        {/* Right content */}
+        {/* Right Content */}
         <div className="landing-visual" data-aos="fade-left">
           <div className="emotion-wheel">
             {emotions.map((emotion, i) => (
@@ -77,9 +96,7 @@ const Landing = () => {
                 className="emotion-petal"
                 style={{
                   backgroundColor: emotion.color,
-                  transform: `rotate(${i * 60}deg) translateY(-120px) rotate(-${
-                    i * 60
-                  }deg)`,
+                  transform: `rotate(${i * 60}deg) translateY(-120px) rotate(-${i * 60}deg)`,
                 }}
                 data-aos="zoom-in"
                 data-aos-delay={300 + i * 100}
@@ -88,11 +105,7 @@ const Landing = () => {
                 <span className="label">{emotion.name}</span>
               </div>
             ))}
-            <div
-              className="wheel-center"
-              data-aos="zoom-in"
-              data-aos-delay="900"
-            >
+            <div className="wheel-center" data-aos="zoom-in" data-aos-delay="900">
               <span>Today</span>
             </div>
           </div>
@@ -111,7 +124,9 @@ const Landing = () => {
           </div>
         </div>
       </div>
-      <LoginModal show={show} onClose={handleClose} />{" "}
+
+      {/* Login Modal */}
+      <LoginModal show={show} onClose={handleClose} />
     </div>
   );
 };

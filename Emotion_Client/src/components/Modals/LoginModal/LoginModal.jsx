@@ -44,7 +44,7 @@ const LoginModal = ({ show, onClose, prefilledEmail = "", message = "" }) => {
         console.log("Login successful:", response.data);
         localStorage.setItem("user_id",response?.data?.user?.user_Id);
         localStorage.setItem("userDetails", JSON.stringify(response?.data?.user));
-
+        localStorage.setItem("token", response?.data?.token);
         // Wait then navigate
         setTimeout(() => {
           navigate("/emotion");
