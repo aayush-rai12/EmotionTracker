@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-// import { useLocation } from "react-router-dom";  <-- remove if unused
 import "./Landing.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import LoginModal from "../Modals/LoginModal/LoginModal";
 import { toast } from "react-toastify";
+import { FiX, FiBook, FiBarChart2, FiTrendingUp, FiCheck, FiHelpCircle } from "react-icons/fi";
 
 const Landing = () => {
   const [show, setShow] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
 
   useEffect(() => {
     AOS.init({
@@ -44,6 +45,73 @@ const Landing = () => {
     { name: "Peace", emoji: "😌", color: "#06D6A0" },
   ];
 
+  const HowItWorksModal = () => (
+    <div className="modal-overlay" onClick={() => setShowHowItWorks(false)}>
+      <div className="how-it-works-modal" onClick={(e) => e.stopPropagation()}>
+        <button
+          className="close-modal"
+          onClick={() => setShowHowItWorks(false)}
+        >
+          <FiX />
+        </button>
+
+        <h2>How EmotionTrack Works</h2>
+
+        <div className="steps-container">
+          <div className="step">
+            <div className="step-icon">
+              <FiBook />
+            </div>
+            <h3>1. Track Daily Emotions</h3>
+            <p>Log your feelings throughout the day with simple taps</p>
+          </div>
+
+          <div className="step">
+            <div className="step-icon">
+              <FiBarChart2 />
+            </div>
+            <h3>2. Visualize Patterns</h3>
+            <p>See your emotional trends with beautiful charts and insights</p>
+          </div>
+
+          <div className="step">
+            <div className="step-icon">
+              <FiTrendingUp />
+            </div>
+            <h3>3. Grow Emotionally</h3>
+            <p>Get personalized tips to improve your emotional wellbeing</p>
+          </div>
+        </div>
+
+        <div className="features-grid">
+          <div className="feature">
+            <FiCheck className="feature-check" />
+            <span>Private & Secure</span>
+          </div>
+          <div className="feature">
+            <FiCheck className="feature-check" />
+            <span>Daily Reminders</span>
+          </div>
+          <div className="feature">
+            <FiCheck className="feature-check" />
+            <span>Progress Tracking</span>
+          </div>
+          <div className="feature">
+            <FiCheck className="feature-check" />
+            <span>Community Support</span>
+          </div>
+        </div>
+
+        <button
+          className="get-started-btn"
+          onClick={() => setShowHowItWorks(false)}
+        >
+          Start My Journey
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="emotion-landing">
       {/* Background Decorations */}
@@ -71,11 +139,13 @@ const Landing = () => {
             <button className="cta-btn primary" onClick={handleShow}>
               <span>Begin Your Journey</span>
             </button>
-            <button className="cta-btn secondary">How It Works</button>
+            <button className="cta-btn secondary how_it_works" onClick={() => setShowHowItWorks(true)}>
+              <FiHelpCircle />How It Works
+            </button>
           </div>
 
           <div className="testimonial" data-aos="fade-up" data-aos-delay="400">
-            <div className="quote-mark">“</div>
+            <div className="quote-mark">"</div>
             <p>
               This app helped me understand my emotional patterns like never
               before.
@@ -96,7 +166,9 @@ const Landing = () => {
                 className="emotion-petal"
                 style={{
                   backgroundColor: emotion.color,
-                  transform: `rotate(${i * 60}deg) translateY(-120px) rotate(-${i * 60}deg)`,
+                  transform: `rotate(${i * 60}deg) translateY(-120px) rotate(-${
+                    i * 60
+                  }deg)`,
                 }}
                 data-aos="zoom-in"
                 data-aos-delay={300 + i * 100}
@@ -105,7 +177,11 @@ const Landing = () => {
                 <span className="label">{emotion.name}</span>
               </div>
             ))}
-            <div className="wheel-center" data-aos="zoom-in" data-aos-delay="900">
+            <div
+              className="wheel-center"
+              data-aos="zoom-in"
+              data-aos-delay="900"
+            >
               <span>Today</span>
             </div>
           </div>
@@ -127,6 +203,9 @@ const Landing = () => {
 
       {/* Login Modal */}
       <LoginModal show={show} onClose={handleClose} />
+      
+      {/* How It Works Modal */}
+      {showHowItWorks && <HowItWorksModal />}
     </div>
   );
 };
