@@ -75,13 +75,6 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
               `/userEmotion/deleteEmotionCard/${id}`
             );
 
-            // Ensure correct response is used
-            if (response.status === 200) {
-              toast.success("Emotion deleted successfully!");  // Success Toast
-            } else {
-              toast.error("Failed to delete emotion.");
-            }
-
             return { id, success: response.status === 200 };
           } catch (error) {
             console.error(`Failed to delete item ${id}:`, error);
@@ -121,7 +114,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
       }
     } catch (error) {
       console.error("Delete failed:", error);
-      alert("Failed to process delete request. Please try again.");
+      toast.error("An error occurred while deleting items.",error.message);
     }
   };
 
