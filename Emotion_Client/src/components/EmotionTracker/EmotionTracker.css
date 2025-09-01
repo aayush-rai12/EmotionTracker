@@ -491,3 +491,35 @@
   font-size: 14px;
   color: #555;
 }
+.streak-card {
+  background: linear-gradient(135deg, #ffe259, #ffa751);
+  color: var(--primary);;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease-in-out;
+}
+
+.streak-card:hover {
+  transform: scale(1.02);
+}
+
+.streak-number {
+  font-size: 1rem;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.milestone-message {
+  font-size: 65%;
+  color: var(--success);
+  opacity: 0.9;
+}
+
+.highest-streak {
+  font-size: 0.85rem;
+  margin-top: 4px;
+  color: #000000ff;
+  opacity: 0.8;
+}

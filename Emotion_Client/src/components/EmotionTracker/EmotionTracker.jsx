@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiPlus, FiBarChart2, FiGrid, FiFilter, FiUser, FiMail, FiLogOut, FiHeart, FiMapPin, FiSun, FiMoon } from "react-icons/fi";
+import {FiPlus, FiBarChart2, FiGrid, FiFilter, FiUser, FiMail, FiLogOut, FiHeart, FiMapPin, FiSun, FiMoon} from "react-icons/fi";
 import EmotionTable from "./EmotionTable/EmotionTable";
 import EmotionModal from "../Modals/EmotionModal/emotionModal";
 import EmotionCreatedCard from "./EmotionCard/EmotionCard";
@@ -37,7 +37,9 @@ const EmotionTracker = () => {
     const userId = localStorage.getItem("user_id");
     if (userId) {
       try {
-        const res = await apiClient.get(`/userEmotion/getUserEmotion/${userId}`);
+        const res = await apiClient.get(
+          `/userEmotion/getUserEmotion/${userId}`
+        );
         setData(res.data.emotionData || []);
       } catch (error) {
         console.error("Failed to fetch emotion data:", error);
@@ -51,25 +53,24 @@ const EmotionTracker = () => {
 
   // Filter data based on time selection
   const filteredData = () => {
-
     const now = new Date();
     if (filter === "week") {
       console.log("Filtering for past week", data);
       const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      return data.filter(item => new Date(item.createdAt) >= oneWeekAgo);
+      return data.filter((item) => new Date(item.createdAt) >= oneWeekAgo);
     } else if (filter === "month") {
       const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-      return data.filter(item => new Date(item.createdAt) >= oneMonthAgo);
+      return data.filter((item) => new Date(item.createdAt) >= oneMonthAgo);
     }
-    // return data;
     return data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   };
 
   const handleLogout = () => {
     localStorage.removeItem("userDetails");
     localStorage.removeItem("user_id");
-    localStorage.removeItem("token"); 
-    navigate("/");  };
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
   return (
     <div className="emotion-tracker-container">
@@ -80,24 +81,34 @@ const EmotionTracker = () => {
             <FiHeart className="title-icon" />
             <h1>Emotion Tracker</h1>
           </div>
-          <p className="app-subtitle">Understand and reflect on your emotional journey</p>
-          
+          <p className="app-subtitle">
+            Understand and reflect on your emotional journey
+          </p>
+
           {/* Personalized Greeting */}
         </div>
-          <div className="user-greeting">
-            <span className="greeting-text">Hi {greeting}</span>
-            <span className="user-name">{user?.Name || "User"}!</span>
-            <span className="greeting-emoji">
-              {greeting === "Good Morning" ? "☀️" : greeting === "Good Afternoon" ? "🌞" : "🌙"}
-            </span>
-          </div>
-        
+        <div className="user-greeting">
+          <span className="greeting-text">Hi {greeting}</span>
+          <span className="user-name">{user?.Name || "User"}!</span>
+          <span className="greeting-emoji">
+            {greeting === "Good Morning"
+              ? "☀️"
+              : greeting === "Good Afternoon"
+              ? "🌞"
+              : "🌙"}
+          </span>
+        </div>
+
         <div className="header-right">
           <div className="user-profile">
             <div className="user-info">
               <div className="user-avatar">
                 {user?.profileImage ? (
-                  <img src={user.profileImage} alt={user.Name} className="profile-image" />
+                  <img
+                    src={user.profileImage}
+                    alt={user.Name}
+                    className="profile-image"
+                  />
                 ) : (
                   <div className="avatar-placeholder">
                     <FiUser size={24} />
@@ -122,7 +133,11 @@ const EmotionTracker = () => {
                 <span className="status-dot"></span>
                 Online
               </div>
-              <button className="logout-btn" onClick={handleLogout} title="Logout">
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+                title="Logout"
+              >
                 <FiLogOut size={18} />
               </button>
             </div>
@@ -132,25 +147,47 @@ const EmotionTracker = () => {
 
       {/* Stats Section */}
       <div className="stats-section">
+        <div className="stat-card streak-card">
+          <span className="streak-number">
+            🔥 {user?.streak || 0} day{user?.streak === 1 ? "" : "s"}
+          </span>
+          <span className="milestone-message">{user?.milestoneMessage}</span>
+          <span className="highest-streak">
+            🏆 Best: {user?.highestStreak || 0} days
+          </span>
+        </div>
         <div className="stat-card">
           <span className="stat-number">{data.length}</span>
           <span className="stat-label">Total Entries</span>
         </div>
         <div className="stat-card">
           <span className="stat-number">
-            {new Set(data.map(item => item.mood)).size}
+            {new Set(data.map((item) => item.mood)).size}
           </span>
           <span className="stat-label">Different Moods</span>
         </div>
         <div className="stat-card">
           <span className="stat-number">
-            {Math.round(data.filter(item => item.intensity === "High" || item.intensity === "Very High").length / data.length * 100) || 0}%
+            {Math.round(
+              (data.filter(
+                (item) =>
+                  item.intensity === "High" || item.intensity === "Very High"
+              ).length /
+                data.length) *
+                100
+            ) || 0}
+            %
           </span>
           <span className="stat-label">High Intensity</span>
         </div>
         <div className="stat-card">
           <span className="stat-number">
-            {data.filter(item => item.intensity === "Low" || item.intensity === "Very Low").length}
+            {
+              data.filter(
+                (item) =>
+                  item.intensity === "Low" || item.intensity === "Very Low"
+              ).length
+            }
           </span>
           <span className="stat-label">Calm Moments</span>
         </div>
@@ -166,15 +203,15 @@ const EmotionTracker = () => {
           </button>
 
           <div className="view-controls">
-            <button 
-              className={`view-btn ${viewMode === 'cards' ? 'active' : ''}`}
-              onClick={() => setViewMode('cards')}
+            <button
+              className={`view-btn ${viewMode === "cards" ? "active" : ""}`}
+              onClick={() => setViewMode("cards")}
             >
               <FiGrid /> Cards
             </button>
-            <button 
-              className={`view-btn ${viewMode === 'table' ? 'active' : ''}`}
-              onClick={() => setViewMode('table')}
+            <button
+              className={`view-btn ${viewMode === "table" ? "active" : ""}`}
+              onClick={() => setViewMode("table")}
             >
               <FiBarChart2 /> Table
             </button>
@@ -182,8 +219,8 @@ const EmotionTracker = () => {
 
           <div className="filter-controls">
             <FiFilter />
-            <select 
-              value={filter} 
+            <select
+              value={filter}
               onChange={(e) => setFilter(e.target.value)}
               className="filter-select"
             >
@@ -197,7 +234,8 @@ const EmotionTracker = () => {
         {/* Info based on filter */}
         <div className="filter-summary">
           <p>
-            Showing <strong>{filteredData().length}</strong> entries {filter !== 'all' && `from the past ${filter}`}
+            Showing <strong>{filteredData().length}</strong> entries{" "}
+            {filter !== "all" && `from the past ${filter}`}
           </p>
         </div>
 
@@ -207,7 +245,10 @@ const EmotionTracker = () => {
               <div className="emoji-placeholder">😊</div>
             </div>
             <h3>No emotions recorded yet</h3>
-            <p>Start tracking your emotions to understand patterns and improve wellbeing</p>
+            <p>
+              Start tracking your emotions to understand patterns and improve
+              wellbeing
+            </p>
             <button
               className="primary-button"
               onClick={() => setShowModal(true)}
