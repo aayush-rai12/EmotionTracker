@@ -191,13 +191,10 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
         size="lg"
         style={{
           backgroundColor: mood
-            ? `0 10px 30px ${mood.color}40`
-            : "0 10px 30px rgba(0, 0, 0, 0.15)",
-          boxShadow: mood
-            ? `0 10px 30px ${mood.color}40`
-            : "0 10px 30px rgba(0, 0, 0, 0.15)",
+            ? `${mood.color}40`
+            : "rgba(0, 0, 0, 0.5)",
           transition: "all 0.3s ease-in-out",
-          border: "none",
+          border: "2px solid #00000033",
           borderRadius: "16px",
           overflow: "hidden",
         }}
