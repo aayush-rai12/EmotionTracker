@@ -71,7 +71,9 @@ const Landing = () => {
               <FiBarChart2 />
             </div>
             <h3>2. Visualize Patterns</h3>
-            <p>See your emotional trends with beautiful charts and insights</p>
+            <p>See your emotional trends with beautiful charts and insights
+              <span style={{fontStyle: 'italic', color: 'gray'}}>(In-Progress)</span>
+            </p>
           </div>
 
           <div className="step">
