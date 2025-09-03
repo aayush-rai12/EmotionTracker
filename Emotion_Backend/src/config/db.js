@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const mongoDB = process.env.MONGO_URL_local;
+const mongoDB = process.env.MONGO_URI;
 
 mongoose.connect(mongoDB)
 
