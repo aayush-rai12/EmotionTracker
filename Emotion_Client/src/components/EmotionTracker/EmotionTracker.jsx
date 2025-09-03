@@ -42,7 +42,7 @@ const EmotionTracker = () => {
         );
         setData(res.data.emotionData || []);
       } catch (error) {
-        console.error("Failed to fetch emotion data:", error);
+        alert("Failed to fetch emotion data:", error.message);
       }
     }
   };
@@ -55,7 +55,6 @@ const EmotionTracker = () => {
   const filteredData = () => {
     const now = new Date();
     if (filter === "week") {
-      console.log("Filtering for past week", data);
       const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       return data.filter((item) => new Date(item.createdAt) >= oneWeekAgo);
     } else if (filter === "month") {

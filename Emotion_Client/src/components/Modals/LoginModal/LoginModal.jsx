@@ -31,17 +31,14 @@ const LoginModal = ({ show, onClose, prefilledEmail = "", message = "" }) => {
     setIsLoading(true);
     setError("");
     setResMessage("");
-    console.log("resre")
     try {
       const response = await apiClient.post("/auth/users", {
         email,
         password,
         rememberMe,
       });
-      console.log('respomce')
       if (response?.data.success) {
         setResMessage(response.data.message); // Show success message on button
-        console.log("Login successful:", response.data);
         localStorage.setItem("user_id",response?.data?.user?.user_Id);
         localStorage.setItem("userDetails", JSON.stringify(response?.data?.user));
         localStorage.setItem("token", response?.data?.token);

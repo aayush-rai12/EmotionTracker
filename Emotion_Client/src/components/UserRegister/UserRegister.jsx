@@ -131,7 +131,6 @@ const UserRegister = () => {
 
       const response = await apiClient.post("/auth/userRegister", data);
 
-      console.log("Registration successful:", response.data);
       setRegistrationSuccess(true);
       setShowLoginModal(true);
     } catch (err) {

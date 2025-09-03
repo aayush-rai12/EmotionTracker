@@ -13,7 +13,6 @@ export const saveUserEmotion = async (req, res) => {
       preferredActivity,
       partnerImpact,
     } = req.body;
-    console.log("Saving user emotion:", req.body);
 
     // Logic to save the user's emotion data
     const newEmotion = new usersEmotion({
@@ -32,7 +31,6 @@ export const saveUserEmotion = async (req, res) => {
       .status(200)
       .json({ message: "User emotion saved successfully", data: newEmotion });
   } catch (error) {
-    console.error("Error saving user emotion:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -40,7 +38,6 @@ export const saveUserEmotion = async (req, res) => {
 export const getUserEmotions = async (req, res) => {
   try {
     const user_Id = req.params.user_Id;
-    console.log("Fetching emotions for user:", user_Id);
 
     // Validate user_Id
     if (!user_Id) {
@@ -56,7 +53,6 @@ export const getUserEmotions = async (req, res) => {
       emotionData,
     });
   } catch (error) {
-    console.error("Error fetching user emotions:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -65,7 +61,6 @@ export const updateEmotionCard = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-    console.log("Updating emotion card with ID:", id, "Data:", updateData);
     // Validate id
     if (!id) {
       return res.status(400).json({ message: "Invalid emotion card ID!" });
@@ -81,7 +76,6 @@ export const updateEmotionCard = async (req, res) => {
       updatedCard,
     });
   } catch (error) {
-    console.error("Error updating emotion card:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -89,7 +83,6 @@ export const updateEmotionCard = async (req, res) => {
 export const deleteEmotionCard = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Deleting emotion card with ID:", id);
 
     // Validate id
     if (!id) {
@@ -109,7 +102,6 @@ export const deleteEmotionCard = async (req, res) => {
       deletedCard,
     });
   } catch (error) {
-    console.error("Error deleting emotion card:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -118,7 +110,6 @@ export const updateSupport = async (req, res) => {
   try {
     const _id = req.params.id //this is the card id;
     const {supportValues} = req.body;
-    console.log("Updating support for card ID:", _id, "New support value:", supportValues);
     // Validate id
     if (!_id) {
       return res.status(400).json({ message: "Invalid emotion card ID!" });
@@ -128,7 +119,6 @@ export const updateSupport = async (req, res) => {
     if (!updatedCard) {
       return res.status(404).json({ message: "Emotion card not found!" });
     }
-    console.log("Updated card:", updatedCard);
     res.status(200).json({
       success: true,
       message: "Support updated successfully",
@@ -136,7 +126,6 @@ export const updateSupport = async (req, res) => {
     });
   }
   catch (error) {
-    console.error("Error updating support:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 }

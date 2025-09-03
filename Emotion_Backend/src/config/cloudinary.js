@@ -14,7 +14,6 @@ cloudinary.config({
 export const uploadImage = async(filePath, folderName) => {
   
   if (!filePath) {
-    console.error('Cloudinary upload error: filePath is missing or undefined');
     throw new Error('Cloudinary upload error: filePath is missing or undefined');
   }
   try {
@@ -24,7 +23,6 @@ export const uploadImage = async(filePath, folderName) => {
     });
     return result;
   } catch (error) {
-     console.error('Error uploading to Cloudinary', error);
     return error;
   }
 };
@@ -35,7 +33,6 @@ export const deleteImage = async (publicId) => {
   try {
     await cloudinary.uploader.destroy(publicId);
   } catch (error) {
-    console.error('Error deleting from Cloudinary', error);
     return error;
   }
 }

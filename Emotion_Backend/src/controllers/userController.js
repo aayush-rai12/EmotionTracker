@@ -6,8 +6,6 @@ import dotenv from 'dotenv';
 export const userRegister = async (req, res) => {
   try{
     const { name, email, password, location, profileImage } = req.body;
-    console.log('Registering user:', req.body);
-    console.log('Received file:',name.charAt(0).toUpperCase() + name.slice(1).toLowerCase());
     // Check if user already exists
     const existingUser = await User.find({ email });
     if (existingUser.length > 0) {
@@ -35,7 +33,6 @@ export const userRegister = async (req, res) => {
 
     // Save the user to the database
     await newUser.save();
-    console.log('User registered successfully:', newUser);
     return res.status(200).json({
       success: true,
       message: "User registered successfully",
@@ -45,19 +42,16 @@ export const userRegister = async (req, res) => {
       },
     });
   }catch (error) {
-    console.error('Error registering user:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
 
 export const userLogin = async (req, res) => {
-  console.log("User login request received", req.body);
   const { email, password, rememberMe } = req.body;
 
   try {
     //Find user by email
     const user = await User.findOne({ email });
-    console.log(user || "User not found");
 
     if (!user) {
       return res.status(400).json({ message: "User not found" });
@@ -115,7 +109,6 @@ export const userLogin = async (req, res) => {
     const token = jwt.sign({ id: user._id,name: user.name, project: "EmoTacker"}, process.env.JWT_SECRET, {
       expiresIn: rememberMe ? "7d" : "1d", 
     });
-    console.log("Generated JWT:", token);
 
     // Return response
     return res.status(200).json({
@@ -134,9 +127,8 @@ export const userLogin = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error during login:", error);
     return res
       .status(500)
-      .json({ success: false, message: "Internal server error" });
+      .json({ success: false, message: "Internal server error", error: error.message });
   }
 }

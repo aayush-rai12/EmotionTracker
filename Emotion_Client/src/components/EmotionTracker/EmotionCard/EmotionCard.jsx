@@ -75,7 +75,6 @@ function EmotionCreatedCard({data}) {
     >
       {data.map(
         (card, index) => (
-          // console.log("object.keys(card)", card),
           (
             <div
               className={`emotion-card card-${index}`}

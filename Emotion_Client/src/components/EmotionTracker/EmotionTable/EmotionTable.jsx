@@ -49,7 +49,6 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
     // alert(`Edit function will be implemented for ID: ${id}`);
     const entry = data.find((item) => item._id === id);
     if (entry) {
-      console.log("Editing entry:", entry);
       setEditItem(entry);
       setShowModal(true);
     }
@@ -160,7 +159,6 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
         ...prev,
         [id]: value,
       }));
-      console.log("Updating support for ID:", id, "to value:", value);
       // Update on db server
       const res = await apiClient.patch(`/userEmotion/updateSupport/${id}`, {
         supportValues: value,
@@ -176,7 +174,6 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
           draggable: true,
           progress: undefined,
         });
-        console.log("Support updated!");
       } else {
         alert("Failed to update support");
       }
