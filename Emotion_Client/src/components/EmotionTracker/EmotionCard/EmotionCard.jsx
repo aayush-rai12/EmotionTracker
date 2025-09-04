@@ -113,7 +113,7 @@ function EmotionCreatedCard({data}) {
 
               <div className="footer-row">
                 <span className="footer-text">
-                  date:{" "}
+                  Date:{" "}
                   {card.createdDate || card.createdAt?.slice(0, 10) || "N/A"}
                 </span>
                 <div className="footer-like">

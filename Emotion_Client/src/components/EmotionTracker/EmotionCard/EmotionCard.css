@@ -134,20 +134,38 @@
 
 @media (max-width: 600px) {
   .info-block {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
-    gap: 4px;
+    gap: 0px;
+    font-size: 0.8rem;
+  }
+  .intensity-tag{
+    font-size: 0.8rem;
+    padding: 3px 0px;
+  }
+  .emotion-info{
+    gap: 5px;
   }
 
+  .emotion-quote{
+    font-size: 1rem ;
+  }
+
+  .mood-tag{
+    font-size: 0.8rem;
+    padding: 1px 5px;
+  }
   .footer-row {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: 6px;
   }
 
-  .footer-text {
-    text-align: center;
+  .like-button {
+    padding: 5px 15px;
+    font-size: 0.9rem;
   }
+
 }
 /* heart like effect */
 .heart {

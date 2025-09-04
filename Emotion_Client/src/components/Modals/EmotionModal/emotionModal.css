@@ -27,9 +27,14 @@
 }
 
 .custom_modal .modal-header {
+  /* border: none;
+  padding: 20px 25px 15px; */
   border: none;
   padding: 20px 25px 15px;
+  margin: -2%;
+  padding: 5%;
 }
+
 
 .custom_modal .modal-title {
   font-weight: 700;
@@ -248,6 +253,12 @@
     padding: 0 1rem;
   }
   
+   .custom_modal .modal-header {
+    font-size: 1.2rem;
+    margin-top: 12%;
+    padding: 12%;
+  }
+
   .emotionModal_card {
     padding: 20px;
   }
@@ -281,6 +292,7 @@
     height: 40px;
     font-size: 20px;
   }
+ 
 }
 
 /* Animation */

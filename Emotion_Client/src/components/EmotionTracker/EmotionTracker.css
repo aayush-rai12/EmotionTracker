@@ -293,7 +293,7 @@
   padding: 12px 24px;
   border-radius: 12px;
   font-weight: 600;
-  display: flex;
+  /* display: flex; */
   align-items: center;
   gap: 8px;
   cursor: pointer;
@@ -453,7 +453,12 @@
   }
 
   .stats-section {
-    grid-template-columns: 1fr;
+    /* grid-template-columns: 1fr; */
+    display: flex;
+    flex-flow: wrap;
+    align-content: center;
+    justify-content: center;
+  
   }
 }
 
