@@ -1,3 +1,5 @@
+/* EmotionTable.css */
+
 .emotion_table {
   width: 100%;
   border-collapse: collapse;
@@ -7,11 +9,12 @@
 }
 
 .emotion_table th {
-  background: #f2e6df;
+  /* background: #f2e6df; */
+  background: #4f30d5;
   padding: 6px;
   text-align: left;
   font-weight: bold;
-  color: #5c3317;
+  color: white;
 }
 
 .emotion_table td {
@@ -19,12 +22,14 @@
   border-bottom: 1px solid #ddd;
 }
 
-.intensity-tag {
+.intensity-tag,
+.mood-tag {
   display: inline-block;
   padding: 5px 12px;
   border-radius: 30px;
   font-size: 12px;
   font-weight: bold;
+  white-space: nowrap;
 }
 
 /* Intensity styles */
@@ -32,34 +37,21 @@
   background: #e0f7fa;
   color: #00796b;
 }
-
 .low {
   background: #d4f5d4;
   color: #2b7a2b;
 }
-
 .moderate {
   background: #fff9c4;
   color: #f57f17;
 }
-
 .high {
   background: #ffd1d1;
   color: #bc6060;
 }
-
 .very_high {
   background: #ffb3b3;
   color: #b71c1c;
-}
-
-/* Mood tag style */
-.mood-tag {
-  display: inline-block;
-  padding: 5px 12px;
-  border-radius: 30px;
-  font-size: 12px;
-  font-weight: bold;
 }
 
 /* Toggle Switch */
@@ -68,15 +60,13 @@
   display: inline-block;
   width: 40px;
   height: 24px;
-  top: 5px !important;
+  top: 5px;
 }
-
 .emotion_toggle_switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
-
 .switch {
   position: absolute;
   cursor: pointer;
@@ -88,10 +78,9 @@
   transition: 0.4s;
   border-radius: 24px;
 }
-
 .switch:before {
-  position: absolute;
   content: "";
+  position: absolute;
   height: 16px;
   width: 16px;
   left: 4px;
@@ -100,15 +89,12 @@
   transition: 0.4s;
   border-radius: 50%;
 }
-
 input:checked + .switch {
   background-color: #fbbf24;
 }
-
 input:checked + .switch:before {
   transform: translateX(16px);
 }
-
 .switch.loading {
   opacity: 0.7;
   cursor: wait;
@@ -119,7 +105,6 @@ input:checked + .switch:before {
   display: flex;
   gap: 10px;
   justify-content: center;
-  /* align-items: center; */
   background-color: #5c3317;
   border-radius: 17px;
   padding: 1px;
@@ -138,21 +123,17 @@ input:checked + .switch:before {
   width: 35px;
   height: 35px;
 }
-
 .emotion_edit_btn {
   background-color: #4caf50;
   color: white;
 }
-
 .emotion_edit_btn:hover {
   background-color: #45a049;
 }
-
 .emotion_delete_btn {
   background-color: #f44336;
   color: white;
 }
-
 .emotion_delete_btn:hover {
   background-color: #d32f2f;
 }
@@ -165,63 +146,13 @@ input:checked + .switch:before {
   border-radius: 8px;
   margin: 20px 0;
 }
-
 .no-data-message p {
   font-size: 18px;
   color: #6c757d;
   margin-bottom: 20px;
 }
 
-.table-responsive {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Selected Actions Bar */
-.selected-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  bottom: 0;
-  background: rgb(184, 147, 147);
-  padding: 0.3rem;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
-
-.delete-selected-btn {
-  background: #ff4444;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.delete-selected-btn:hover {
-  background: #cc0000;
-}
-
-@media (max-width: 768px) {
-  .emotion_table th,
-  .emotion_table td {
-    font-size: 12px;
-    padding: 8px;
-  }
-
-  .emotion_action_buttons {
-    display: block;
-    text-align: center;
-  }
-
-  .emotion_edit_btn,
-  .emotion_delete_btn {
-    width: 100%;
-    margin: 5px 0;
-  }
-}
-
-/* Emotion Support Dropdown Styling */
+/* Dropdown */
 .support-dropdown {
   width: 100%;
   padding: 6px 10px;
@@ -233,18 +164,83 @@ input:checked + .switch:before {
   cursor: pointer;
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
-
 .support-dropdown:focus {
   outline: none;
   border-color: #007bff;
   background-color: #fff;
 }
-
 .support-dropdown:hover {
   border-color: #999;
 }
 
-.support-dropdown option {
-  background-color: #fff;
-  color: #671616;
+/* Responsive Container */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Selected Actions */
+.selected-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  bottom: 0;
+  background: rgb(184, 147, 147);
+  padding: 0.3rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+.delete-selected-btn {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.delete-selected-btn:hover {
+  background: #cc0000;
+}
+
+/* 📱 Mobile Styles */
+@media (max-width: 768px) {
+  .emotion_table {
+    min-width: 800px; /* Enables scroll on small screens */
+  }
+
+  .emotion_table th,
+  .emotion_table td {
+    font-size: 12px;
+    padding: 6px;
+    white-space: nowrap;
+  }
+
+  .emotion_edit_btn,
+  .emotion_delete_btn {
+    width: 28px;
+    height: 28px;
+    margin: 4px 0;
+  }
+
+  .mood-tag,
+  .intensity-tag {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .support-dropdown {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .selected-actions {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .delete-selected-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 14px;
+  }
 }
