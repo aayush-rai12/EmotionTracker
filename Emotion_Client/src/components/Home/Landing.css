@@ -201,8 +201,8 @@ h1 {
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--joy), var(--excitement));
 }
@@ -279,7 +279,7 @@ h1 {
   gap: 20px;
   width: 100%;
   max-width: 400px;
-  margin-top: 2%;
+  margin-top: 10%;
 }
 
 .stat-card {
