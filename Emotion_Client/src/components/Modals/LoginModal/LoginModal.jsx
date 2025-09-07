@@ -13,7 +13,7 @@ const moods = [
   { label: "Angry", emoji: "😡", color: "#f8d7da" },
   { label: "Calm", emoji: "😌", color: "#d4edda" },
   { label: "Excited", emoji: "🤩", color: "#e0c3fc" },
-  { label: "Loved", emoji: "❤️", color: "#c9184a" },
+  { label: "Loved", emoji: "💖", color: "#c9184a" },
   { label: "Celebrating", emoji: "🥳", color: "#d1f7ff" },
 ];
 

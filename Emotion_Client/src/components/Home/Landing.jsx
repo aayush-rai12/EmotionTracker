@@ -3,6 +3,7 @@ import "./Landing.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import LoginModal from "../Modals/LoginModal/LoginModal";
+import HowItWorksModal from "../Modals/HowItWork/HowItWork";
 import { toast } from "react-toastify";
 import { FiX, FiBook, FiBarChart2, FiTrendingUp, FiCheck, FiHelpCircle } from "react-icons/fi";
 
@@ -44,7 +45,10 @@ const Landing = () => {
   const handleShow = () => {
     setShowHowItWorks(false);
     setShow(true);}
-
+  const handleHowItworksModal = () => {
+    setShow(false);
+    setShowHowItWorks(true);
+  }
   const emotions = [
     { name: "Joy", emoji: "😊", color: "#FFD166" },
     { name: "Sadness", emoji: "😢", color: "#6A8EAE" },
@@ -53,87 +57,6 @@ const Landing = () => {
     { name: "Excitement", emoji: "🤩", color: "#FF9A47" },
     { name: "Peace", emoji: "😌", color: "#06D6A0" },
   ];
-
-  const HowItWorksModal = () => (
-    <div className="modal-overlay" onClick={() => setShowHowItWorks(false)}>
-      <div
-        className="how-it-works-modal"
-        onClick={(e) => e.stopPropagation()}
-        data-aos="zoom-in"
-      >
-        <button
-          className="close-modal"
-          onClick={() => setShowHowItWorks(false)}
-        >
-          <FiX />
-        </button>
-
-        <h2 data-aos="fade-up" data-aos-delay="100">
-          How EmotionTrack Works
-        </h2>
-
-        <div className="steps-container">
-          <div className="step" data-aos="fade-up" data-aos-delay="200">
-            <div className="step-icon">
-              <FiBook />
-            </div>
-            <h3>1. Track Daily Emotions</h3>
-            <p>Log your feelings throughout the day with simple taps</p>
-          </div>
-
-          <div className="step" data-aos="fade-up" data-aos-delay="300">
-            <div className="step-icon">
-              <FiBarChart2 />
-            </div>
-            <h3>2. Visualize Patterns</h3>
-            <p>
-              See your emotional trends with beautiful charts and insights
-              <span style={{ fontStyle: "italic", color: "gray" }}>
-                (In-Progress)
-              </span>
-            </p>
-          </div>
-
-          <div className="step" data-aos="fade-up" data-aos-delay="400">
-            <div className="step-icon">
-              <FiTrendingUp />
-            </div>
-            <h3>3. Grow Emotionally</h3>
-            <p>Get personalized tips to improve your emotional wellbeing</p>
-          </div>
-        </div>
-
-        <div className="features-grid">
-          <div className="feature" data-aos="fade-up" data-aos-delay="500">
-            <FiCheck className="feature-check" />
-            <span>Private & Secure</span>
-          </div>
-          <div className="feature" data-aos="fade-up" data-aos-delay="600">
-            <FiCheck className="feature-check" />
-            <span>Daily Reminders</span>
-          </div>
-          <div className="feature" data-aos="fade-up" data-aos-delay="700">
-            <FiCheck className="feature-check" />
-            <span>Progress Tracking</span>
-          </div>
-          <div className="feature" data-aos="fade-up" data-aos-delay="800">
-            <FiCheck className="feature-check" />
-            <span>Community Support</span>
-          </div>
-        </div>
-
-        <button
-          className="get-started-btn"
-          // onClick={() => setShowHowItWorks(false)}
-          onClick={handleShow}
-          data-aos="zoom-in-up"
-          data-aos-delay="900"
-        >
-          Start My Journey
-        </button>
-      </div>
-    </div>
-  );
 
   return (
     <div className="emotion-landing">
@@ -174,7 +97,7 @@ const Landing = () => {
             </button>
             <button
               className="cta-btn secondary how_it_works"
-              onClick={() => setShowHowItWorks(true)}
+              onClick={handleHowItworksModal}
             >
               <FiHelpCircle />
               How It Works
@@ -254,7 +177,10 @@ const Landing = () => {
       <LoginModal show={show} onClose={handleClose} />
 
       {/* How It Works Modal */}
-      {showHowItWorks && <HowItWorksModal />}
+      {showHowItWorks && (<HowItWorksModal show={showHowItWorks} onClose={() => setShowHowItWorks(false) } openLogin={handleShow} 
+  />
+)}
+
     </div>
   );
 };

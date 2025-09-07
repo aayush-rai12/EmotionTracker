@@ -11,7 +11,6 @@
 .modal-header {
   border-bottom: none;
   padding: 30px 30px 20px;
-  /* background: linear-gradient(135deg, #8a7bc8 0%, #6a5ac4 100%); */
   color: white;
   text-align: center;
   position: relative;
@@ -36,15 +35,22 @@
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  background: rgba(255,255,255,0.2);
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
+  cursor: pointer;
 }
 
 .emoji-bubble:hover {
-  transform: translateY(-5px);
+  transform: translateY(5px)!important;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
 }
 
+.emoji{
+  /* font-size: 1.5rem; */
+  transition: all 0.3s ease;
+}
+.emoji:hover{
+transform: scale(2);
+}
 .modal-dialog{
   height: 100px;
 }
@@ -283,4 +289,29 @@
   color: #07ff00;
   border: none;
   transition: background 0.3s ease, color 0.3s ease;
+}
+@media(max-width: 768px){
+  .modal-dialog{
+    height: auto;
+  }
+  .modal-header {
+    padding: 20px 15px 15px;
+  }
+  .auth-form {
+    padding: 0 15px;
+  }
+  .social-auth {
+    padding: 0 15px;
+    margin: 15px 0;
+  }
+  .auth-footer {
+    padding: 5px 15px 15px;
+    font-size: 13px;
+  }
+  .emoji-bubble {
+    width: 45px;
+    height: 40px;
+    font-size: 20px;
+    padding-top: 5px;
+  }
 }
