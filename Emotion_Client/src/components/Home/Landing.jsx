@@ -32,9 +32,18 @@ const Landing = () => {
       localStorage.removeItem("sessionExpiredMessage");
     }
   }, []);
+  
+  const TodayDay = () => {
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const today = new Date();
+    const dayName = days[today.getDay()];
+    return <span>{dayName}</span>;
+  };
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setShowHowItWorks(false);
+    setShow(true);}
 
   const emotions = [
     { name: "Joy", emoji: "😊", color: "#FFD166" },
@@ -47,7 +56,11 @@ const Landing = () => {
 
   const HowItWorksModal = () => (
     <div className="modal-overlay" onClick={() => setShowHowItWorks(false)}>
-      <div className="how-it-works-modal" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="how-it-works-modal"
+        onClick={(e) => e.stopPropagation()}
+        data-aos="zoom-in"
+      >
         <button
           className="close-modal"
           onClick={() => setShowHowItWorks(false)}
@@ -55,10 +68,12 @@ const Landing = () => {
           <FiX />
         </button>
 
-        <h2>How EmotionTrack Works</h2>
+        <h2 data-aos="fade-up" data-aos-delay="100">
+          How EmotionTrack Works
+        </h2>
 
         <div className="steps-container">
-          <div className="step">
+          <div className="step" data-aos="fade-up" data-aos-delay="200">
             <div className="step-icon">
               <FiBook />
             </div>
@@ -66,17 +81,20 @@ const Landing = () => {
             <p>Log your feelings throughout the day with simple taps</p>
           </div>
 
-          <div className="step">
+          <div className="step" data-aos="fade-up" data-aos-delay="300">
             <div className="step-icon">
               <FiBarChart2 />
             </div>
             <h3>2. Visualize Patterns</h3>
-            <p>See your emotional trends with beautiful charts and insights
-              <span style={{fontStyle: 'italic', color: 'gray'}}>(In-Progress)</span>
+            <p>
+              See your emotional trends with beautiful charts and insights
+              <span style={{ fontStyle: "italic", color: "gray" }}>
+                (In-Progress)
+              </span>
             </p>
           </div>
 
-          <div className="step">
+          <div className="step" data-aos="fade-up" data-aos-delay="400">
             <div className="step-icon">
               <FiTrendingUp />
             </div>
@@ -86,19 +104,19 @@ const Landing = () => {
         </div>
 
         <div className="features-grid">
-          <div className="feature">
+          <div className="feature" data-aos="fade-up" data-aos-delay="500">
             <FiCheck className="feature-check" />
             <span>Private & Secure</span>
           </div>
-          <div className="feature">
+          <div className="feature" data-aos="fade-up" data-aos-delay="600">
             <FiCheck className="feature-check" />
             <span>Daily Reminders</span>
           </div>
-          <div className="feature">
+          <div className="feature" data-aos="fade-up" data-aos-delay="700">
             <FiCheck className="feature-check" />
             <span>Progress Tracking</span>
           </div>
-          <div className="feature">
+          <div className="feature" data-aos="fade-up" data-aos-delay="800">
             <FiCheck className="feature-check" />
             <span>Community Support</span>
           </div>
@@ -106,7 +124,10 @@ const Landing = () => {
 
         <button
           className="get-started-btn"
-          onClick={() => setShowHowItWorks(false)}
+          // onClick={() => setShowHowItWorks(false)}
+          onClick={handleShow}
+          data-aos="zoom-in-up"
+          data-aos-delay="900"
         >
           Start My Journey
         </button>
@@ -117,36 +138,54 @@ const Landing = () => {
   return (
     <div className="emotion-landing">
       {/* Background Decorations */}
-      <div className="emotion-bg">
-        <div className="bg-circle joy"></div>
-        <div className="bg-circle calm"></div>
-        <div className="bg-circle passion"></div>
+      <div className="emotion-bg">  
+         <div className="bg-circle joy" data-aos="fade-down"></div>
+        <div className="bg-circle calm" data-aos="fade-left"></div>
+        <div className="bg-circle passion" data-aos="fade-right"></div>
       </div>
 
       {/* Main Content */}
       <div className="landing-container">
         {/* Left Content */}
-        <div className="landing-content" data-aos="fade-right">
-          <h1>
+        <div
+          className="landing-content"
+          data-aos="fade-right"
+          data-aos-delay="100"
+        >
+          <h1 data-aos="fade-up" data-aos-delay="150">
+            <span>Emotion Diary</span>
+            <br />
             <span className="title-gradient">Listen to your heart</span>
             <br />
             Your emotions matter
           </h1>
-          <p className="subtitle">
+          <p className="subtitle" data-aos="fade-up" data-aos-delay="250">
             A safe space to track your feelings, understand patterns, and
             cultivate emotional wellbeing.
           </p>
 
-          <div className="cta-section" data-aos="fade-up" data-aos-delay="200">
+          <div
+            className="cta-section"
+            data-aos="zoom-in-up"
+            data-aos-delay="350"
+          >
             <button className="cta-btn primary" onClick={handleShow}>
               <span>Begin Your Journey</span>
             </button>
-            <button className="cta-btn secondary how_it_works" onClick={() => setShowHowItWorks(true)}>
-              <FiHelpCircle />How It Works
+            <button
+              className="cta-btn secondary how_it_works"
+              onClick={() => setShowHowItWorks(true)}
+            >
+              <FiHelpCircle />
+              How It Works
             </button>
           </div>
 
-          <div className="testimonial" data-aos="fade-up" data-aos-delay="400">
+          <div
+            className="testimonial"
+            data-aos="fade-left"
+            data-aos-delay="500"
+          >
             <div className="quote-mark">"</div>
             <p>
               This app helped me understand my emotional patterns like never
@@ -160,8 +199,16 @@ const Landing = () => {
         </div>
 
         {/* Right Content */}
-        <div className="landing-visual" data-aos="fade-left">
-          <div className="emotion-wheel">
+        <div
+          className="landing-visual"
+          data-aos="fade-left"
+          data-aos-delay="200"
+        >
+          <div
+            className="emotion-wheel"
+            data-aos="flip-left"
+            data-aos-delay="300"
+          >
             {emotions.map((emotion, i) => (
               <div
                 key={i}
@@ -173,7 +220,7 @@ const Landing = () => {
                   }deg)`,
                 }}
                 data-aos="zoom-in"
-                data-aos-delay={300 + i * 100}
+                data-aos-delay={400 + i * 100}
               >
                 <span className="emoji">{emotion.emoji}</span>
                 <span className="label">{emotion.name}</span>
@@ -181,20 +228,20 @@ const Landing = () => {
             ))}
             <div
               className="wheel-center"
-              data-aos="zoom-in"
+              data-aos="zoom-in-up"
               data-aos-delay="900"
             >
-              <span>Today</span>
+              <TodayDay />
             </div>
           </div>
 
           <div className="stats-grid" data-aos="fade-up" data-aos-delay="1000">
-            <div className="stat-card">
+            <div className="stat-card" data-aos="flip-up" data-aos-delay="1100">
               <div className="stat-icon">📈</div>
               <div className="stat-value">87%</div>
               <div className="stat-label">Better self-awareness</div>
             </div>
-            <div className="stat-card">
+            <div className="stat-card" data-aos="flip-up" data-aos-delay="1200">
               <div className="stat-icon">💖</div>
               <div className="stat-value">10K+</div>
               <div className="stat-label">Happy users</div>
@@ -205,7 +252,7 @@ const Landing = () => {
 
       {/* Login Modal */}
       <LoginModal show={show} onClose={handleClose} />
-      
+
       {/* How It Works Modal */}
       {showHowItWorks && <HowItWorksModal />}
     </div>

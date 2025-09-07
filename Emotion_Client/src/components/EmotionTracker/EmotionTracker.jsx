@@ -78,7 +78,7 @@ const EmotionTracker = () => {
         <div className="header-left">
           <div className="app-title">
             <FiHeart className="title-icon" />
-            <h1>Emotion Tracker</h1>
+            <h1>Your Emotion Diary</h1>
           </div>
           <p className="app-subtitle">
             Understand and reflect on your emotional journey

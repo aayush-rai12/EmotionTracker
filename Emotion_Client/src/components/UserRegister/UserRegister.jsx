@@ -215,7 +215,7 @@ const UserRegister = () => {
             ) : (
               <div className="upload-prompt">
                 <FiCamera className="camera-icon" />
-                <span>Add Profile Photo</span>
+                <span style={{fontSize:"50%"}}>Add Profile Photo</span>
               </div>
             )}
           </div>
