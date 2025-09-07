@@ -62,6 +62,7 @@ const HowItWorksModal = ({ show, onClose, openLogin }) => {
       justifyContent: "center",
       paddingButtom:0,
       fontSize: isMobile? "0.8rem" : "1rem",
+      borderTop: "none",
     },
     modaltext: {
       color: "#555",
@@ -80,7 +81,7 @@ const HowItWorksModal = ({ show, onClose, openLogin }) => {
       scrollable
     >
       <div style={styles.modalContent}>
-        <Modal.Header closeButton style={{ borderBottom: "none" }}>
+        <Modal.Header closeButton style={{ borderBottom: "none", margin: isMobile? "0.5rem":"-10px" }}>
           <Modal.Title style={styles.modalTitle}>
             How Emotion Diary Works
           </Modal.Title>
