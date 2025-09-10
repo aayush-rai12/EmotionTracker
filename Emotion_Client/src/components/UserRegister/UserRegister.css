@@ -262,7 +262,6 @@
 @media (max-width: 480px) {
   .register-card {
     padding: 25px;
-    max-height: 95vh;
   }
   
   .form-row {
