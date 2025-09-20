@@ -118,40 +118,40 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
   };
 
   // Update handleToggle to be more optimistic
-  const handleToggle = async (id) => {
-    try {
-      const itemToToggle = data.find((item) => item._id === id);
-      if (!itemToToggle) return;
+  // const handleToggle = async (id) => {
+  //   try {
+  //     const itemToToggle = data.find((item) => item._id === id);
+  //     if (!itemToToggle) return;
 
-      // Optimistically update UI
-      setData(
-        data.map((item) =>
-          item._id === id ? { ...item, isPublic: !item.isPublic } : item
-        )
-      );
+  //     // Optimistically update UI
+  //     setData(
+  //       data.map((item) =>
+  //         item._id === id ? { ...item, isPublic: !item.isPublic } : item
+  //       )
+  //     );
 
-      // Update here card status is visible or not
-      const response = await apiClient.patch(
-        `/user/toggleEmotionStatus/${id}`,
-        {
-          isPublic: !itemToToggle.isPublic,
-        }
-      );
+  //     // Update here card status is visible or not
+  //     const response = await apiClient.patch(
+  //       `/user/toggleEmotionStatus/${id}`,
+  //       {
+  //         isPublic: !itemToToggle.isPublic,
+  //       }
+  //     );
 
-      if (response.status !== 200) {
-        setData(
-          data.map((item) =>
-            item._id === id
-              ? { ...item, isPublic: itemToToggle.isPublic }
-              : item
-          )
-        );
-        throw new Error("Toggle failed");
-      }
-    } catch (error) {
-      console.error("Failed to toggle status:", error);
-    }
-  };
+  //     if (response.status !== 200) {
+  //       setData(
+  //         data.map((item) =>
+  //           item._id === id
+  //             ? { ...item, isPublic: itemToToggle.isPublic }
+  //             : item
+  //         )
+  //       );
+  //       throw new Error("Toggle failed");
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to toggle status:", error);
+  //   }
+  // };
 
   const handleSupportChange = async (id, value) => {
     try {
