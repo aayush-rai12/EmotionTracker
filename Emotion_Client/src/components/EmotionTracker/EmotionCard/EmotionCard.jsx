@@ -1,10 +1,15 @@
 import React from "react";
 import { useState } from "react";
 import "./EmotionCard.css";
+import Ai_suggestion_modal from "../../Modals/Ai_Suggestion_Modal/Ai_Suggestion";
+import { FaLightbulb, FaMagic } from 'react-icons/fa';
 
-function EmotionCreatedCard({data}) {
+function EmotionCreatedCard({data, userName}) {
     const [hoverColor, setHoverColor] = useState(null);
     const [bgColor, setBgColor] = useState("#fcb1b1");
+    const [openAiModal, setOpenAiModal] = useState(false)
+    const [selectedCard, setSelectedCard] = useState(null);
+    
 
     const startHeartRain = (index) => {
     const card = document.querySelector(`.card-${index}`);
@@ -65,6 +70,11 @@ function EmotionCreatedCard({data}) {
     }
   };
 
+  const handleAiModal =(cardDetails)=>{
+    setSelectedCard(cardDetails)
+    setOpenAiModal(true)
+  }
+
   return (
     <div
       className="cards-container"
@@ -123,6 +133,7 @@ function EmotionCreatedCard({data}) {
                   >
                     Like
                   </button>
+                  <button className="ai-suggestion-button" onClick={()=>handleAiModal(card)}><FaMagic/>Ai</button>
                 </div>
                 <span className="footer-text" style={{ textAlign: "right" }}>
                   Liked by: You!
@@ -132,6 +143,14 @@ function EmotionCreatedCard({data}) {
           )
         )
       )}
+      <Ai_suggestion_modal 
+        show={openAiModal}
+        handleAiModalClose={() => {
+            setOpenAiModal(false);
+          }}
+        selectedAiCard={selectedCard}
+        userName={userName}
+      />
     </div>
   );
 }

@@ -1,4 +1,3 @@
-
 .cards-container {
   display: flex;
   flex-wrap: wrap;
@@ -112,25 +111,61 @@
 }
 
 .footer-like {
-  flex-shrink: 0;
+  display: flex;
+  margin-top: -4px;
+  transition: background 0.3s ease;
+  gap: 5px;
 }
 
 .like-button {
   background-color: #ff4d6d;
   color: white;
   font-size: 1rem;
-  padding: 10px 28px;
-  border: none;
-  border-radius: 30px;
+  font-weight: 600;
+  padding: 10px 25px;
+  border: 0.1rem solid #ffffff;
+  border-radius: 25px;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
+  box-shadow: 0 2px 4px rgb(0, 0, 0);
 }
 
 .like-button:hover {
   background-color: #e04360;
   transform: scale(1.05);
 }
+
+.ai-suggestion-button {
+  background: linear-gradient(to right, #d064ee, #6e8efb);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 25px;
+  border: 0.1rem solid #ffffff;
+  box-shadow: 0 2px 4px rgb(0, 0, 0);
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.ai-suggestion-button:hover {
+  background: linear-gradient(to right, #6e8efb, #cc39f4);
+  color: white;
+  transform: translateY(-2px);
+  transform: scale(1.05);
+}
+
+.ai-suggestion-button svg {
+  transition: transform 0.3s ease;
+}
+
+.ai-suggestion-button:hover svg {
+  transform: rotate(15deg);
+}
+
 
 @media (max-width: 600px) {
   .info-block {
@@ -139,19 +174,19 @@
     gap: 0px;
     font-size: 0.8rem;
   }
-  .intensity-tag{
+  .intensity-tag {
     font-size: 0.8rem;
     padding: 3px 0px;
   }
-  .emotion-info{
+  .emotion-info {
     gap: 5px;
   }
 
-  .emotion-quote{
-    font-size: 1rem ;
+  .emotion-quote {
+    font-size: 1rem;
   }
 
-  .mood-tag{
+  .mood-tag {
     font-size: 0.8rem;
     padding: 1px 5px;
   }
@@ -165,7 +200,11 @@
     padding: 5px 15px;
     font-size: 0.9rem;
   }
-
+  .ai-suggestion-button {
+    font-size: 0.9rem;
+    padding: 8px 18px;
+    border-radius: 20px;
+  }
 }
 /* heart like effect */
 .heart {

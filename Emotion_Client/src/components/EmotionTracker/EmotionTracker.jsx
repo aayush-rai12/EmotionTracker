@@ -113,7 +113,6 @@ const EmotionTracker = () => {
                     <FiUser size={24} />
                   </div>
                 )}
-                {/* <div className="online-indicator"></div> */}
               </div>
               <div className="user-details">
                 <h3>{user?.Name || "User"}</h3>
@@ -150,10 +149,12 @@ const EmotionTracker = () => {
           <span className="streak-number">
             🔥 {user?.streak || 0} day{user?.streak === 1 ? "" : "s"}
           </span>
-          <span className="milestone-message">{user?.milestoneMessage}</span>
-          <span className="highest-streak">
-            🏆 Best: {user?.highestStreak || 0} days
-          </span>
+         <div className="user-stats">
+            <span className="milestone-message">{user?.milestoneMessage}</span>
+            <span className="highest-streak">
+              🏆 Best: {user?.highestStreak || 0} days
+            </span>
+          </div> 
         </div>
         <div className="stat-card">
           <span className="stat-number">{data.length}</span>
@@ -258,13 +259,16 @@ const EmotionTracker = () => {
         ) : (
           <>
             {viewMode === "cards" ? (
-              <EmotionCreatedCard data={filteredData()} />
+              <EmotionCreatedCard 
+              data={filteredData()}
+              userName={user?.Name || "User"} />
             ) : (
               <EmotionTable
                 data={filteredData()}
                 setData={setData}
                 setShowModal={() => setShowModal(true)}
                 setEditItem={setEditItem}
+                userName={user?.Name || "User"}
               />
             )}
           </>
