@@ -2,8 +2,7 @@ import axios from "axios";
 import { isTokenExpired, handleTokenExpiry } from "./authUtils";
 
 const apiClient = axios.create({
-  // baseURL: "https://emotion-tracker-backend-n5vd.onrender.com/api",
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://emotion-tracker-backend-n5vd.onrender.com/api",
   headers: { "Content-Type": "application/json" },
 });
 
