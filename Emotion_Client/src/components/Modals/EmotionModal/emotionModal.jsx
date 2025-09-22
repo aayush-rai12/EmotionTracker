@@ -275,7 +275,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
                           }}
                           onClick={() => setMood(item)}
                         >
-                          {item.emoji}
+                          <span className="mood_emoji_hover">{item.emoji}</span>
                         </button>
                       ))}
                     </div>

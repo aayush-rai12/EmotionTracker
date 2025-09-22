@@ -15,6 +15,7 @@ const EmotionTracker = () => {
   const [filter, setFilter] = useState("all");
   const [user, setUser] = useState(null);
   const [greeting, setGreeting] = useState("");
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const navigate = useNavigate();
 
   // Get user data from localStorage and set greeting
@@ -49,6 +50,20 @@ const EmotionTracker = () => {
 
   useEffect(() => {
     fetchEmotionData();
+  }, []);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
   }, []);
 
   // Filter data based on time selection
@@ -128,8 +143,8 @@ const EmotionTracker = () => {
             </div>
             <div className="header-actions">
               <div className="login-status">
-                <span className="status-dot"></span>
-                Online
+                <span className={`status-dot ${isOnline ? "online" : "offline"}`}></span>
+                <span className={`login-status-${isOnline ? "online" : "offline"}`}>{isOnline ? "Online" : "Offline"}</span>
               </div>
               <button
                 className="logout-btn"

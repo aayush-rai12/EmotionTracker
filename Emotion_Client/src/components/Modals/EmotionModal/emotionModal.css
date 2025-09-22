@@ -192,9 +192,16 @@
   height: 50px;
 }
 
-.mood_btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+.mood_btn:hover .mood_emoji_hover{
+  transform: scale(1.2);
+  /* box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); */
+}
+.mood_emoji_hover {
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+.mood_btn:hover .mood_emoji_hover {
+  transform: scale(2);
 }
 
 .mood_btn.selected {

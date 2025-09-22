@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   position: relative;
   padding: 20px;
   overflow: hidden;
@@ -36,7 +36,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+  background-image: url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -60,8 +60,12 @@
 }
 
 @keyframes float {
-  0% { transform: translateY(100vh) rotate(0deg); }
-  100% { transform: translateY(-100px) rotate(360deg); }
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-100px) rotate(360deg);
+  }
 }
 
 /* Card Styles - Fixed Height */
@@ -263,25 +267,26 @@
   .register-card {
     padding: 25px;
   }
-  
+
   .form-row {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .floating-emoji {
     font-size: 18px;
   }
 }
 /* Error message styling */
 .error-message {
+  width: 55%;
+  margin: 15px auto 0;
+  text-align: center;
   color: #ef4444;
   background-color: #fee2e2;
-  padding: 10px 15px;
+  padding: 3px;
   border-radius: 8px;
-  margin-bottom: 20px;
   font-size: 14px;
-  text-align: center;
 }
 
 /* Disabled button state */

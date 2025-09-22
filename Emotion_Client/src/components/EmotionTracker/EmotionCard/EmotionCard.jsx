@@ -121,25 +121,30 @@ function EmotionCreatedCard({data, userName}) {
                 </div>
               </div>
 
-              <div className="footer-row">
-                <span className="footer-text">
-                  Date:{" "}
-                  {card.createdDate || card.createdAt?.slice(0, 10) || "N/A"}
-                </span>
+              {/* <div className="footer-roww"> */}
+                <div className="footer-date-like">
+                  <span className="footer-text">
+                    Date:{" "}
+                    {card.createdDate || card.createdAt?.slice(0, 10) || "N/A"}
+                  </span>
+                  <span className="footer-text" style={{ textAlign: "right" }}>
+                    Liked by: You!
+                  </span>
+                </div>
                 <div className="footer-like">
                   <button
                     className="like-button"
                     onClick={() => startHeartRain(index)}
                   >
-                    Like
+                    💖Like
                   </button>
                   <button className="ai-suggestion-button" onClick={()=>handleAiModal(card)}><FaMagic/>Ai</button>
                 </div>
-                <span className="footer-text" style={{ textAlign: "right" }}>
+                {/* <span className="footer-text" style={{ textAlign: "right" }}>
                   Liked by: You!
-                </span>
+                </span> */}
               </div>
-            </div>
+            // </div>
           )
         )
       )}

@@ -184,10 +184,8 @@
 .login-status {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: var(--success);
-  font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 16px;
+  gap: 8px;
 }
 
 .status-dot {
@@ -196,6 +194,23 @@
   background: var(--success);
   border-radius: 50%;
   animation: pulse 2s infinite;
+  display: inline-block;
+}
+
+.status-dot.online {
+  font-size: 16px;
+  background-color:var(--success);
+}
+
+.login-status-offline{
+  color: red
+}
+.login-status-online{
+  color: var(--success)
+}
+
+.status-dot.offline {
+  background-color: red;
 }
 
 @keyframes pulse {

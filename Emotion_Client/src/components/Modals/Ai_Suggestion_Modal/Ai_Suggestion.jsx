@@ -42,6 +42,8 @@ const AiSuggestionModal = ({ show, handleAiModalClose, selectedAiCard, userName 
       setAiSuggestion(null);
       setError(null);
       setLoading(false);
+      setSelectedSongEmbed(null)
+
     }
   }, [selectedAiCard, show]);
 
@@ -151,7 +153,13 @@ const AiSuggestionModal = ({ show, handleAiModalClose, selectedAiCard, userName 
                 </li>
               )}
             </ul>
-            {loadingSong && <p>Loading song...</p>}
+            {/* {loadingSong && <p>Loading song...</p>} */}
+            {loadingSong && (
+              <div className="ai-loading-state">
+                  <FaSpinner className="spinner-icon" />
+                  <p>Getting AI suggestions...</p>
+              </div>
+            )}
 
               {selectedSongEmbed && (
                 <div className="song-iframe-container">

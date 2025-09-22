@@ -112,9 +112,10 @@
 
 .footer-like {
   display: flex;
-  margin-top: -4px;
+  margin-top: 5px;
   transition: background 0.3s ease;
   gap: 5px;
+  justify-content: center;
 }
 
 .like-button {
@@ -225,4 +226,8 @@
     transform: translateY(-100vh) translateX(15px) scale(0.9);
     opacity: 0;
   }
+}
+.footer-date-like{
+  display: flex;
+  margin-top: 0.5rem;
 }

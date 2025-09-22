@@ -329,6 +329,8 @@ h1 {
   
   .testimonial {
     margin: 0 auto;
+    margin-top: 1% !important;
+    margin-bottom: 11% !important;
   }
 }
 
@@ -365,6 +367,7 @@ h1 {
     width: auto;
     height: auto;
     margin-top: 20px;
+    margin-bottom: -88px;
   }
   
   .wheel-center {

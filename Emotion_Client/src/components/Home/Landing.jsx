@@ -116,7 +116,7 @@ const Landing = () => {
             </p>
             <div className="user">
               <div className="avatar"></div>
-              <span>Aayush Rai, 3 months user</span>
+              <span>Diary User, 3 months user</span>
             </div>
           </div>
         </div>
