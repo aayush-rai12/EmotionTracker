@@ -49,6 +49,9 @@ A comprehensive web application that helps users track, manage, and analyze thei
 <img width="1637" height="951" alt="image" src="https://github.com/user-attachments/assets/160545a2-2e84-4608-989a-1a8172fdd366" />
 
 ### **AI-Powered Suggestions**: Integrated Gemini API for personalized quotes and music recommendations
+<img width="1919" height="960" alt="image" src="https://github.com/user-attachments/assets/3c8fe68d-0963-4cb6-9a9e-59a2c7f6eec6" />
+<img width="1457" height="951" alt="image" src="https://github.com/user-attachments/assets/c7652f8b-bb36-4941-a0d9-74d81308795d" />
+<img width="1458" height="956" alt="image" src="https://github.com/user-attachments/assets/85d04edd-5a61-46d4-8111-44f643a8ba37" />
 
 ### Table View
 <img width="1919" height="1011" alt="image" src="https://github.com/user-attachments/assets/ea9d797c-baa0-47e6-9461-c97da95a4810" />
