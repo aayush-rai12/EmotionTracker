@@ -12,6 +12,7 @@ A comprehensive web application that helps users track, manage, and analyze thei
 - **Session Management**: Token-based user sessions( in-progress) 
 
 ### 📊 Emotion Management
+- **AI-Powered Suggestions**: Integrated Gemini API for personalized quotes and music recommendations
 - **Create Emotion Entries**: Add new emotional experiences with detailed information
 - **Edit Existing Entries**: Modify previous emotion records
 - **Delete Entries**: Remove unwanted or incorrect entries
@@ -44,8 +45,10 @@ A comprehensive web application that helps users track, manage, and analyze thei
 ### Emotion Entry Modal
 ![Emotion Modal](https://github.com/user-attachments/assets/d0754b61-6770-4a1a-b848-4b766d615d5f)
 
-### Emotion Card with Like Button
-<img width="1919" height="1022" alt="image" src="https://github.com/user-attachments/assets/6716431e-887c-4661-96c6-4329d286a1c8" />
+### Emotion Card with Like Button AI Suggestions
+<img width="1637" height="951" alt="image" src="https://github.com/user-attachments/assets/160545a2-2e84-4608-989a-1a8172fdd366" />
+
+### **AI-Powered Suggestions**: Integrated Gemini API for personalized quotes and music recommendations
 
 ### Table View
 <img width="1919" height="1011" alt="image" src="https://github.com/user-attachments/assets/ea9d797c-baa0-47e6-9461-c97da95a4810" />
