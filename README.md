@@ -2,7 +2,7 @@
 
 A comprehensive web application that helps users track, manage, and analyze their emotional states over time. Built with a modern MERN stack and JWT authentication for security.
 
-![Emotion Tracker Home Page](https://github.com/user-attachments/assets/4e48fe98-b719-446b-968e-cd6ba61ee9a0)
+<img width="1919" height="961" alt="image" src="https://github.com/user-attachments/assets/a9505b52-053e-4de8-8ecb-eff0cd8177f6" />
 
 ## Features
 
@@ -31,7 +31,7 @@ A comprehensive web application that helps users track, manage, and analyze thei
 ## Screenshots
 
 ### Home Page
-![Home Page](https://github.com/user-attachments/assets/4e48fe98-b719-446b-968e-cd6ba61ee9a0)
+<img width="1919" height="961" alt="image" src="https://github.com/user-attachments/assets/ea61d81c-8dae-4124-9166-be54e382f11e" />
 
 ### Login Modal
 ![Login Modal](https://github.com/user-attachments/assets/4cfd1b39-6474-4fde-8995-e870788c6549)
