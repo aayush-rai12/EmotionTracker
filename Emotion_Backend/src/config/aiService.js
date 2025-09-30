@@ -42,7 +42,7 @@ const fallbackSuggestionsByMood = {
       instrumental_or_trending: "Uplifting Pop Instrumental"
     }
   },
-  Calm: {
+  default: {
     suggestion_quotes: "Take a moment to breathe and do something that makes you smile.",
     songs_recommendation: "Here are some songs that might brighten your day:",
     songs: {
