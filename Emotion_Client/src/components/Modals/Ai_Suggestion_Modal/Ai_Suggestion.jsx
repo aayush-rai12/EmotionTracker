@@ -64,16 +64,20 @@ const AiSuggestionModal = ({ show, handleAiModalClose, selectedAiCard, userName 
         return "Hello";
       }
   };
-
+  function extractSongName(fullTitle) {
+    return fullTitle.split(' - ')[0];
+  }
   const fetchSongLink = async (songQuery) => {
     setLoadingSong(true);
     setSelectedSongEmbed(null); 
+    //extract only song name from "song name - artist"
+    // songQuery = extractSongName(songQuery);
     
     try {
       const res = await apiClient.post(`/userEmotion/getYoutubeLink`,{ query: songQuery });
       setSelectedSongEmbed(res.data.embedUrl);
     } catch (error) {
-      console.error("Failed to load song link", error);
+      console.error("Failed to load song link Request");
       setSelectedSongEmbed(null);
     } finally{
       setLoadingSong(false);

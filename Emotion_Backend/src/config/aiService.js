@@ -97,7 +97,15 @@ export const generateSuggestions = async (data) => {
 
   try {
     //here I used gemini-1.5-flash model
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    // const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+    
+    // Alternative models you can try:
+    // const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    // const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+    // const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+    
      // Send prompt to Gemini
     const result = await model.generateContent(prompt);
     const suggestion = result.response.text();
