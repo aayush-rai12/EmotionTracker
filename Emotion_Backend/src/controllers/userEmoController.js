@@ -159,7 +159,8 @@ export const emmotionAiSuggestion = async (req, res) => {
     //     songs_recommendation:
     //       "If you'd like, here are some songs that match your mood:",
     //     songs: {
-    //       hindi: "Kabira - Yeh Jawaani Hai Deewani (Rekha Bharadwaj)",
+    //       // hindi: "Kabira - Yeh Jawaani Hai Deewani (Rekha Bharadwaj)",
+    //       hindi: "Channa Mereya - Ae Dil Hai Mushkil (Arijit Singh)",
     //       english: "Fix You - Coldplay",
     //       instrumental_or_trending: "Nuvole Bianche - Ludovico Einaudi",
     //     },
@@ -174,45 +175,85 @@ export const emmotionAiSuggestion = async (req, res) => {
 export const getYoutubeLink = async (req, res) => {
   try {
     const { query } = req.body;
-    if (!query)
+    if (!query) {
       return res.status(400).json({ error: "Song query is required" });
-    const response = await axios.get(
+    }
+
+    //Search videos by query
+    const searchResponse = await axios.get(
       "https://www.googleapis.com/youtube/v3/search",
       {
         params: {
           part: "snippet",
           q: query,
-          maxResults: 5, // thoda zyada results lao
+          maxResults: 6,
           type: "video",
           key: process.env.YOUTUBE_API_KEY,
         },
       }
     );
 
-    // check each video for embeddable status
-    const videoIds = response.data.items.map((item) => item.id.videoId);
+    const videoIds = searchResponse.data.items.map((item) => item.id.videoId);
 
-    const details = await axios.get(
+    if (videoIds.length === 0) {
+      return res.status(404).json({ error: "No videos found" });
+    }
+
+    //Fetch full video details
+    const videoDetailsResponse = await axios.get(
       "https://www.googleapis.com/youtube/v3/videos",
       {
         params: {
-          part: "status",
+          part: "snippet,contentDetails,status",
           id: videoIds.join(","),
           key: process.env.YOUTUBE_API_KEY,
         },
       }
     );
-    // console.log("details",details.data.items[0].status );
-    // find first embeddable video
-    const embeddableVideo = details.data.items.find(
-      (v) => v.status.embeddable === true && v.status.privacyStatus === "public"
-    );
 
-    if (!embeddableVideo) {
-      return res.status(404).json({ error: "No embeddable video found" });
+    const videos = videoDetailsResponse.data.items;
+
+    //Loop through videos and validate via oEmbed
+    for (const video of videos) {
+      const {
+        id,
+        snippet,
+        status,
+        contentDetails,
+      } = video;
+
+      const isEmbeddable = status?.embeddable === true;
+      const isPublic = status?.privacyStatus === "public";
+      const noAgeRestriction = !contentDetails?.contentRating?.ytRating;
+      const noRegionRestriction = !contentDetails?.regionRestriction;
+      if (isEmbeddable && isPublic && noAgeRestriction && noRegionRestriction) {
+        const embedUrl = `https://www.youtube.com/embed/${id}`;
+        //Confirm it works with YouTube oEmbed
+        try {
+        const finalUrl =  await axios.get(
+            `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`
+          );
+          //oEmbed details passed here
+          return res.json({
+            title: snippet.title,
+            embedUrl,
+          });
+        } catch (oEmbedErr) {
+          console.log(`oEmbed failed for video: ${id} (${snippet.title})`);
+          // oEmbed check failed - skip this video
+          continue;
+        }
+      }
+      // If no embeddable video found, fallback to a default song
+      return res.json({
+            title: "Nachde Ne Saare",
+            embedUrl: "https://www.youtube.com/embed/HgIW7P4dsXU",
+      });
     }
-    const videoId = embeddableVideo.id;
-    return res.json({ embedUrl: `https://www.youtube.com/embed/${videoId}` });
+
+    return res
+      .status(404)
+      .json({ error: "No fully embeddable video found after oEmbed check" });
   } catch (error) {
     console.error("YouTube API error:", error.message);
     return res.status(500).json({ error: "Failed to fetch video" });
