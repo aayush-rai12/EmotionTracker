@@ -59,37 +59,31 @@ export const generateSuggestions = async (data) => {
   const prompt = `
                   You are an empathetic mental wellness assistant.
 
-                  A user has shared the following emotional state:
-                  - Feeling: ${feeling}
-                  - Mood: ${mood}
-                  - Triggered Reason: ${triggered_reason}
-                  - Preferred Activity: ${preferred_activity}
+                    ## Input
+                    - Feeling: ${feeling}
+                    - Mood: ${mood}
+                    - Trigger: ${triggered_reason}
+                    - Preferred Activity: ${preferred_activity}
 
-                  Your task:
-                  1. Understand their emotions deeply and respond with kindness.
-                  2. Suggest a short, **realistic and actionable activity** that they can do right now to feel better.
-                  3. If possible, connect your suggestion to their preferred activity.
-                  4. Suggest **three song options** based on their emotional state:
-                    - If they are sad or stressed → suggest a calming, hopeful, or uplifting song.
-                    - If they are anxious → suggest a motivational, grounding, or relaxing song.
-                    - If they are happy → suggest a cheerful or energetic song to maintain their good mood.
-                    - Always pick a song that feels relevant to their context (feeling + mood + trigger + activity). 
-                  5. Pick songs according to their emotional state:
-                    - If they are sad or stressed → suggest a calming, hopeful, or uplifting song.
-                    - If they are anxious → suggest a motivational, grounding, or relaxing song.
-                    - If they are happy → suggest a cheerful or energetic song to maintain their good mood.
-                    - Always pick a song that feels relevant to their context (feeling + mood + trigger + activity).
-                  6. Keep your response encouraging, supportive, and under 2 sentences.
+                    ## Task
+                    1. Start with empathy (acknowledge their state).
+                    2. Suggest a short, realistic activity they can do *now*, linked to their preferred activity if possible.
+                    3. Suggest 3 songs (Hindi, English, Instrumental/Trending) suitable for their mood:
+                      - sad/stressed → calming & uplifting  
+                      - anxious → motivational & grounding  
+                      - happy → cheerful & energetic  
+                    4. **Conciseness:** suggestion_quotes must be under 2 sentences.
 
-                 Respond ONLY in pure JSON format (no code blocks, no extra text) with the following keys:
-                  
+                    ## Output
+                    Respond **only in pure JSON**:
+
                     {
-                      "suggestion_quotes": "<your helpful and actionable suggestion here>",
+                      "suggestion_quotes": "<empathy + actionable suggestion (2-3 sentences max)>",
                       "songs_recommendation": "If you'd like, here are some songs that match your mood:",
                       "songs": {
-                        "hindi": "<hindi song name - artist>",
-                        "english": "<english song name - artist>",
-                        "instrumental_or_trending": "<global/trending instrumental or feel-good song>"
+                        "hindi": "<song - artist>",
+                        "english": "<song - artist>",
+                        "instrumental or trending": "<instrumental/trending song>"
                       }
                     }
 
