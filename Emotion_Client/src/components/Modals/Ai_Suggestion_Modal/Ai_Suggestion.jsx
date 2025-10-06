@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Modal, Button } from "react-bootstrap";
-import { FaMagic, FaSpinner, FaLink } from "react-icons/fa";
+import { FaMagic, FaSpinner, FaLink, FaMusic } from "react-icons/fa";
 import "./Ai_Suggestion.css";
 import apiClient from "../../utils/apiClient";
 
@@ -10,6 +10,11 @@ const AiSuggestionModal = ({ show, handleAiModalClose, selectedAiCard, userName 
   const [error, setError] = useState(null);
   const [selectedSongEmbed, setSelectedSongEmbed] = useState(null);
   const [loadingSong, setLoadingSong] = useState(false);
+  const [activeSongType, setActiveSongType] = useState(null);
+
+  // Refs for auto-scroll
+  const videoContainerRef = useRef(null);
+  const modalBodyRef = useRef(null);
 
   useEffect(() => {
     if (selectedAiCard && show) {
@@ -42,10 +47,23 @@ const AiSuggestionModal = ({ show, handleAiModalClose, selectedAiCard, userName 
       setAiSuggestion(null);
       setError(null);
       setLoading(false);
-      setSelectedSongEmbed(null)
-
+      setSelectedSongEmbed(null);
+      setActiveSongType(null);
     }
   }, [selectedAiCard, show]);
+
+  // Auto-scroll when video loads
+  useEffect(() => {
+    if (selectedSongEmbed && videoContainerRef.current) {
+      // Small delay to ensure the iframe is rendered
+      setTimeout(() => {
+        videoContainerRef.current.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }, 300);
+    }
+  }, [selectedSongEmbed]);
 
   const getMoodBasedGreeting = () => {
       if (!selectedAiCard?.mood) return "Hello";
@@ -64,22 +82,19 @@ const AiSuggestionModal = ({ show, handleAiModalClose, selectedAiCard, userName 
         return "Hello";
       }
   };
-  function extractSongName(fullTitle) {
-    return fullTitle.split(' - ')[0];
-  }
-  const fetchSongLink = async (songQuery) => {
+
+  const fetchSongLink = async (songQuery, songType) => {
     setLoadingSong(true);
-    setSelectedSongEmbed(null); 
-    //extract only song name from "song name - artist"
-    // songQuery = extractSongName(songQuery);
+    setActiveSongType(songType);
+    setSelectedSongEmbed(null);
     
     try {
-      const res = await apiClient.post(`/userEmotion/getYoutubeLink`,{ query: songQuery });
+      const res = await apiClient.post(`/userEmotion/getYoutubeLink`, { query: songQuery });
       setSelectedSongEmbed(res.data.embedUrl);
     } catch (error) {
       console.error("Failed to load song link Request");
       setSelectedSongEmbed(null);
-    } finally{
+    } finally {
       setLoadingSong(false);
     }
   };
@@ -92,10 +107,11 @@ const AiSuggestionModal = ({ show, handleAiModalClose, selectedAiCard, userName 
       onHide={handleAiModalClose}
       centered
       size="lg"
+      scrollable
     >
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className="ai-modal-header">
         <Modal.Title id="ai_modal_title">
-          <FaMagic style={{ color: "#886efbff", marginRight: "8px" }} />
+          <FaMagic className="magic-icon" />
           AI Suggestions:
           <span className="ai-user-greeting">
             {getMoodBasedGreeting()} {userName}!
@@ -103,7 +119,7 @@ const AiSuggestionModal = ({ show, handleAiModalClose, selectedAiCard, userName 
         </Modal.Title>
       </Modal.Header>
 
-      <Modal.Body id="ai_modal_body">
+      <Modal.Body id="ai_modal_body" ref={modalBodyRef}>
         {loading && (
           <div className="ai-loading-state">
             <FaSpinner className="spinner-icon" />
@@ -111,77 +127,125 @@ const AiSuggestionModal = ({ show, handleAiModalClose, selectedAiCard, userName 
           </div>
         )}
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+          <div className="ai-error-message">
+            {error}
+          </div>
+        )}
 
         {!loading && !error && aiSuggestion && (
           <div className="ai-suggestion-content">
-            <h5>Suggestion Quote - Based on your feeling and current mood</h5>
+            <h5 className="section-title">Suggestion Quote - Based on your feeling and current mood</h5>
             <p className="suggestion-quotes">{aiSuggestion.suggestion_quotes}</p>
 
-            <h5>{aiSuggestion.songs_recommendation}</h5>
-            <ul className="songs-list">
-              {aiSuggestion.songs.hindi && (
-                <li>
-                  <div className="song-item">
-                    <div className="song-info">
-                      <strong>Hindi:</strong> {aiSuggestion.songs.hindi}
+            <div className="music-section">
+              <h5 className="music-section-title">
+                <FaMusic className="music-icon" />
+                {aiSuggestion.songs_recommendation || "Songs matching your mood"}
+              </h5>
+              
+              <div className="songs-row">
+                {aiSuggestion.songs.hindi && (
+                  <div className="song-card">
+                    <div className="song-header">
+                      <span className="song-badge hindi-badge">Hindi</span>
                     </div>
-                    <button className="ai-sugg-link-button" onClick={()=>fetchSongLink(aiSuggestion.songs.hindi)}>
-                      <FaLink /> Get Link
+                    <div className="song-info">
+                      <p className="song-title">{aiSuggestion.songs.hindi}</p>
+                    </div>
+                    <button 
+                      className={`ai-sugg-link-button ${activeSongType === 'hindi' ? 'active' : ''}`}
+                      onClick={() => fetchSongLink(aiSuggestion.songs.hindi, 'hindi')}
+                      disabled={loadingSong && activeSongType === 'hindi'}
+                    >
+                      {loadingSong && activeSongType === 'hindi' ? (
+                        <FaSpinner className="spinner-icon-small" />
+                      ) : (
+                        <FaLink />
+                      )}
+                      Get Link
                     </button>
                   </div>
-                </li>
-              )}
-              {aiSuggestion.songs.english && (
-                <li>
-                  <div className="song-item">
-                    <div className="song-info">
-                      <strong>English:</strong> {aiSuggestion.songs.english}
+                )}
+
+                {aiSuggestion.songs.english && (
+                  <div className="song-card">
+                    <div className="song-header">
+                      <span className="song-badge english-badge">English</span>
                     </div>
-                    <button className="ai-sugg-link-button" onClick={()=>fetchSongLink(aiSuggestion.songs.english)}>
-                      <FaLink /> Get Link
+                    <div className="song-info">
+                      <p className="song-title">{aiSuggestion.songs.english}</p>
+                    </div>
+                    <button 
+                      className={`ai-sugg-link-button ${activeSongType === 'english' ? 'active' : ''}`}
+                      onClick={() => fetchSongLink(aiSuggestion.songs.english, 'english')}
+                      disabled={loadingSong && activeSongType === 'english'}
+                    >
+                      {loadingSong && activeSongType === 'english' ? (
+                        <FaSpinner className="spinner-icon-small" />
+                      ) : (
+                        <FaLink />
+                      )}
+                      Get Link
                     </button>
                   </div>
-                </li>
-              )}
-              {aiSuggestion.songs.instrumental_or_trending && (
-                <li>
-                  <div className="song-item">
-                    <div className="song-info">
-                      <strong>Instrumental/Trending:</strong> {aiSuggestion.songs.instrumental_or_trending}
+                )}
+
+                {aiSuggestion.songs.instrumental_or_trending && (
+                  <div className="song-card">
+                    <div className="song-header">
+                      <span className="song-badge instrumental-badge">Instrumental/Trending</span>
                     </div>
-                    <button className="ai-sugg-link-button" onClick={()=>fetchSongLink(aiSuggestion.songs.instrumental_or_trending)}>
-                      <FaLink /> Get Link
+                    <div className="song-info">
+                      <p className="song-title">{aiSuggestion.songs.instrumental_or_trending}</p>
+                    </div>
+                    <button 
+                      className={`ai-sugg-link-button ${activeSongType === 'instrumental' ? 'active' : ''}`}
+                      onClick={() => fetchSongLink(aiSuggestion.songs.instrumental_or_trending, 'instrumental')}
+                      disabled={loadingSong && activeSongType === 'instrumental'}
+                    >
+                      {loadingSong && activeSongType === 'instrumental' ? (
+                        <FaSpinner className="spinner-icon-small" />
+                      ) : (
+                        <FaLink />
+                      )}
+                      Get Link
                     </button>
                   </div>
-                </li>
-              )}
-            </ul>
-            {/* {loadingSong && <p>Loading song...</p>} */}
+                )}
+              </div>
+            </div>
+
             {loadingSong && (
-              <div className="ai-loading-state">
-                  <FaSpinner className="spinner-icon" />
-                  <p>Getting AI suggestions...</p>
+              <div className="song-loading-state">
+                <FaSpinner className="spinner-icon" />
+                <p>Loading song preview...</p>
               </div>
             )}
 
-              {selectedSongEmbed && (
-                <div className="song-iframe-container">
-                  <iframe
-                    width="100%"
-                    height="250"
-                    src={selectedSongEmbed}
-                    title="YouTube player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              )}
+            {selectedSongEmbed && (
+              <div 
+                className="song-iframe-container" 
+                ref={videoContainerRef}
+                id="video-player-section"
+              >
+                <iframe
+                  width="100%"
+                  height="250"
+                  src={selectedSongEmbed}
+                  title="YouTube player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            )}
           </div>
         )}
 
         {!loading && !error && !aiSuggestion && (
-          <p>No suggestions available at the moment.</p>
+          <div className="no-suggestions">
+            <p>No suggestions available at the moment.</p>
+          </div>
         )}
       </Modal.Body>
 
