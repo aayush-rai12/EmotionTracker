@@ -4,6 +4,8 @@ import apiClient from "../../utils/apiClient";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";  
+import Pagination from "../../Pagination/Pagination";
+import usePagination from "../../../hooks/usePagination";
 
 const ToggleSwitch = ({ isPublic, onToggle }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,8 +45,10 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
     "Encouraging",
     "No One Was Involved",
   ];
+  // Pagination states
+  const { currentPage, totalPages, currentCards,handleNext, handlePrev } = usePagination(data, 4);
 
-  // Edit function (will be implemented later)
+  // Edit function
   const handleEdit = (id) => {
     // alert(`Edit function will be implemented for ID: ${id}`);
     const entry = data.find((item) => item._id === id);
@@ -256,7 +260,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
           </tr>
         </thead>
         <tbody>
-          {dataArray.map((item) => (
+          {currentCards.map((item) => (
             <tr key={item._id}>
               <td>
                 <input
@@ -326,6 +330,13 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
           ))}
         </tbody>
       </table>
+     <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onNext={handleNext}
+        onPrev={handlePrev}
+      />
+
     </div>
   );
 };
