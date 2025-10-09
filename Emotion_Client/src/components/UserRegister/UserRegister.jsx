@@ -1,26 +1,15 @@
 import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
-import {
-  FiUser,
-  FiMail,
-  FiMapPin,
-  FiLock,
-  FiCamera,
-  FiX,
-  FiHeart,
-} from "react-icons/fi";
-import "./UserRegister.css";
-import LoginModal from "../Modals/LoginModal/LoginModal"; // Fixed import - should be default import
+import { FiUser, FiMail, FiMapPin, FiLock, FiCamera, FiX, FiHeart } from "react-icons/fi";
+import LoginModal from "../Modals/LoginModal/LoginModal";
 import apiClient from "../utils/apiClient";
+import "./UserRegister.css";
 
 const UserRegister = () => {
   const fileInputRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [error, setError] = useState(null);
-
-  // Form state
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -38,6 +27,12 @@ const UserRegister = () => {
       ...prev,
       [name]: value,
     }));
+
+    // Clear error for the field as user types
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
   };
 
   const handleImageChange = (e) => {
@@ -49,6 +44,9 @@ const UserRegister = () => {
         setPreviewImage(reader.result);
       };
       reader.readAsDataURL(file);
+
+      // Clear error for profile image
+      setErrors((prev) => ({ ...prev, profileImage: "" }));
     }
   };
 
@@ -64,57 +62,40 @@ const UserRegister = () => {
   const removeImage = () => {
     setPreviewImage(null);
     setImageFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const validateForm = () => {
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.password ||
-      !formData.confirmPassword
-    ) {
-      setError("All fields are required");
-      return false;
+    const newErrors = {};
+    const requiredFields = ["name", "email", "location", "password", "confirmPassword"];
+
+    requiredFields.forEach((field) => {
+      if (!formData[field]) {
+        newErrors[field] = `${field[0].toUpperCase() + field.slice(1)} is required`;
+      }
+    });
+
+    if (formData.password && formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return false;
+      newErrors.confirmPassword = "Passwords do not match";
     }
 
-    if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return false;
+    if (!imageFile) {
+      newErrors.profileImage = "Profile image is required";
     }
 
-    setError(null);
-    return true;
-  };
-
-  const closeLoginModal = () => {
-    setShowLoginModal(false);
-    if (registrationSuccess) {
-      // Reset form after successful registration
-      setFormData({
-        name: "",
-        email: "",
-        location: "",
-        password: "",
-        confirmPassword: "",
-      });
-      setPreviewImage(null);
-      setImageFile(null);
-      setRegistrationSuccess(false);
-    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
+
     setIsSubmitting(true);
 
     try {
@@ -129,31 +110,45 @@ const UserRegister = () => {
         data.append("profileImage", base64Image);
       }
 
-      const response = await apiClient.post("/auth/userRegister", data);
+      await apiClient.post("/auth/userRegister", data);
 
       setRegistrationSuccess(true);
       setShowLoginModal(true);
     } catch (err) {
       console.error("Registration error:", err);
-      setError(
-        err.response?.data?.message || "Registration failed. Please try again."
-      );
+      setErrors({ api: err.response?.data?.message || "Registration failed. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const closeLoginModal = () => {
+    setShowLoginModal(false);
+    if (registrationSuccess) {
+      setFormData({
+        name: "",
+        email: "",
+        location: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setPreviewImage(null);
+      setImageFile(null);
+      setRegistrationSuccess(false);
+    }
+  };
+
   return (
     <div className="emotion-register-container">
-      {/* Emotional Background Image */}
+      {/* Background */}
       <div className="background-image-wrapper">
         <div className="background-overlay"></div>
         <div className="background-image"></div>
       </div>
 
-      {/* Floating emotional elements */}
+      {/* Emojis */}
       <div className="floating-emojis">
-        {["😊", "😌", "❤️", "🤗"].map((emoji, i) => (
+        {["😊", "🤩", "❤️", "🥳", "🧘"].map((emoji, i) => (
           <div
             key={i}
             className="floating-emoji"
@@ -168,16 +163,17 @@ const UserRegister = () => {
         ))}
       </div>
 
+      {/* Registration Card */}
       <div className="register-card">
         <div className="card-header">
           <h1>Create Your Account</h1>
           <p>Begin your emotional wellness journey</p>
         </div>
 
-        {/* Error message display */}
-        {error && <div className="error-message">{error}</div>}
+        {/* API Error */}
+        {errors.api && <div className="error-message">{errors.api}</div>}
 
-        {/* Fixed Image Upload Section */}
+        {/* Image Upload */}
         <div className="avatar-upload-container">
           <div
             className={`avatar-preview ${previewImage ? "has-image" : ""}`}
@@ -189,17 +185,6 @@ const UserRegister = () => {
                   src={previewImage}
                   alt="Profile preview"
                   className="profile-image"
-                  onLoad={(e) => {
-                    // Ensure proper image fitting
-                    const img = e.target;
-                    if (img.naturalWidth > img.naturalHeight) {
-                      img.style.width = "100%";
-                      img.style.height = "auto";
-                    } else {
-                      img.style.width = "auto";
-                      img.style.height = "100%";
-                    }
-                  }}
                 />
                 <button
                   type="button"
@@ -215,7 +200,7 @@ const UserRegister = () => {
             ) : (
               <div className="upload-prompt">
                 <FiCamera className="camera-icon" />
-                <span style={{fontSize:"50%"}}>Add Profile Photo</span>
+                <span style={{ fontSize: "50%" }}>Add Profile Photo</span>
               </div>
             )}
           </div>
@@ -227,8 +212,13 @@ const UserRegister = () => {
             style={{ display: "none" }}
           />
         </div>
+        {errors.profileImage && (
+          <div className="field-error" style={{ textAlign: "center", marginBottom: 10 }}>
+            {errors.profileImage}
+          </div>
+        )}
 
-        {/* Registration Form */}
+        {/* Form */}
         <form className="register-form" onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
@@ -242,8 +232,11 @@ const UserRegister = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="Enter your name"
+                className={errors.name ? "input-error" : ""}
               />
+              {errors.name && <span className="field-error">{errors.name}</span>}
             </div>
+
             <div className="form-group">
               <label>
                 <FiMail className="input-icon" />
@@ -254,8 +247,10 @@ const UserRegister = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="your@email.com"
+                placeholder="you@example.com"
+                className={errors.email ? "input-error" : ""}
               />
+              {errors.email && <span className="field-error">{errors.email}</span>}
             </div>
           </div>
 
@@ -270,7 +265,9 @@ const UserRegister = () => {
               value={formData.location}
               onChange={handleInputChange}
               placeholder="Your location"
+              className={errors.location ? "input-error" : ""}
             />
+            {errors.location && <span className="field-error">{errors.location}</span>}
           </div>
 
           <div className="form-row">
@@ -285,8 +282,11 @@ const UserRegister = () => {
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="••••••••"
+                className={errors.password ? "input-error" : ""}
               />
+              {errors.password && <span className="field-error">{errors.password}</span>}
             </div>
+
             <div className="form-group">
               <label>
                 <FiLock className="input-icon" />
@@ -298,15 +298,13 @@ const UserRegister = () => {
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
                 placeholder="••••••••"
+                className={errors.confirmPassword ? "input-error" : ""}
               />
+              {errors.confirmPassword && <span className="field-error">{errors.confirmPassword}</span>}
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="register-btn"
-            disabled={isSubmitting}
-          >
+          <button type="submit" className="register-btn" disabled={isSubmitting}>
             {isSubmitting ? "Registering..." : "Register Now"}
             <FiHeart className="btn-icon" />
           </button>

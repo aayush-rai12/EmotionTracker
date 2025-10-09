@@ -312,3 +312,13 @@
   color: #5b21b6;
   text-decoration: underline;
 }
+.input-error {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+}
+
+.field-error {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
+}
