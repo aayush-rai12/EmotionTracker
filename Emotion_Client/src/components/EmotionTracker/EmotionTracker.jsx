@@ -7,6 +7,7 @@ import apiClient from "../utils/apiClient";
 import "./EmotionTracker.css";
 import { useNavigate } from "react-router-dom";
 import UserHeader from "../UserHeader/UserHeader";
+import { useUserContext } from "../../context/UserContextApi";
 
 const EmotionTracker = () => {
   const [showModal, setShowModal] = useState(false);
@@ -16,7 +17,7 @@ const EmotionTracker = () => {
   const [filter, setFilter] = useState("all");
   const [user, setUser] = useState(null);
   const [greeting, setGreeting] = useState("");
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const { isOnline } = useUserContext();
   const navigate = useNavigate();
 
   // Get user data from localStorage and set greeting
@@ -51,20 +52,6 @@ const EmotionTracker = () => {
 
   useEffect(() => {
     fetchEmotionData();
-  }, []);
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
   }, []);
 
   // Filter data based on time selection
