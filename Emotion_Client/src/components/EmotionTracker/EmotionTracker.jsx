@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {FiPlus, FiBarChart2, FiGrid, FiFilter, FiUser, FiMail, FiLogOut, FiHeart, FiMapPin, FiSun, FiMoon} from "react-icons/fi";
+import {FiPlus, FiBarChart2, FiGrid, FiFilter, FiUser, FiMail, FiLogOut, FiHeart, FiMapPin, FiSun, FiMoon, FiMessageSquare} from "react-icons/fi";
 import EmotionTable from "./EmotionTable/EmotionTable";
 import EmotionModal from "../Modals/EmotionModal/emotionModal";
 import EmotionCreatedCard from "./EmotionCard/EmotionCard";
@@ -170,6 +170,7 @@ const EmotionTracker = () => {
               <option value="month">Past Month</option>
             </select>
           </div>
+            <button className="chat-btn primary-button" onClick={()=>navigate('/chatDeshboard')}><FiMessageSquare/> Chat Dashboad</button>
         </div>
 
         {/* Info based on filter */}
