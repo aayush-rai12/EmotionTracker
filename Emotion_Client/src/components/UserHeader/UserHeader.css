@@ -163,7 +163,7 @@
   gap: 8px;
 }
 
-.status-dot {
+.status-dot-header {
   width: 8px;
   height: 8px;
   background: var(--success);
@@ -172,7 +172,7 @@
   display: inline-block;
 }
 
-.status-dot.online {
+.status-dot-header.online {
   font-size: 16px;
   background-color:var(--success);
 }
@@ -184,7 +184,7 @@
   color: var(--success)
 }
 
-.status-dot.offline {
+.status-dot-header.offline {
   background-color: red;
 }
 

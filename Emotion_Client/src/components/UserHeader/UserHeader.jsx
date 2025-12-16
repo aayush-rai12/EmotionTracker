@@ -59,7 +59,7 @@ function UserHeader({greeting, user, isOnline, handleLogout}) {
           <div className="header-actions">
             <div className="login-status">
               <span
-                className={`status-dot ${isOnline ? "online" : "offline"}`}
+                className={`status-dot-header ${isOnline ? "online" : "offline"}`}
               ></span>
               <span
                 className={`login-status-${isOnline ? "online" : "offline"}`}
