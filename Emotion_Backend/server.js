@@ -5,6 +5,7 @@ import './src/config/db.js';
 import bodyParser from 'body-parser';
 import userRoutes from './src/routes/userRoutes.js';
 import emotionRoutes from './src/routes/userEmotion.js';
+import chatFeatureRoutes from './src/routes/chatFeatureRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', userRoutes);
 app.use('/api/userEmotion', emotionRoutes);
+app.use('/api/chatFeature', chatFeatureRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
