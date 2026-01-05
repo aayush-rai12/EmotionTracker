@@ -16,24 +16,14 @@ const EmotionTracker = () => {
   const [viewMode, setViewMode] = useState("cards");
   const [filter, setFilter] = useState("all");
   const [user, setUser] = useState(null);
-  const [greeting, setGreeting] = useState("");
   const { isOnline } = useUserContext();
   const navigate = useNavigate();
 
-  // Get user data from localStorage and set greeting
+  // Get user data from localStorage
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userDetails"));
     setUser(userData);
-    setGreeting(getGreeting());
   }, []);
-
-  // Function to get appropriate greeting based on time of day
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 17) return "Good Afternoon";
-    return "Good Evening";
-  };
 
   // Fetch all emotion data for the user
   const fetchEmotionData = async () => {
@@ -78,7 +68,6 @@ const EmotionTracker = () => {
     <div className="emotion-tracker-container">
       {/* Combined Header */}
       <UserHeader 
-        greeting={greeting}
         user={user}
         isOnline={isOnline}
         handleLogout={handleLogout}

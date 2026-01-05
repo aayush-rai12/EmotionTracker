@@ -2,7 +2,15 @@ import React from "react";
 import {FiLogOut, FiHeart, FiUser, FiMail, FiMapPin } from "react-icons/fi";
 import "./UserHeader.css";
 
-function UserHeader({greeting, user, isOnline, handleLogout}) {
+function UserHeader({user, isOnline, handleLogout}) {
+  // Function to get appropriate greeting based on time of day
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 17) return "Good Afternoon";
+    return "Good Evening";
+  };
+   const greeting = getGreeting();
   return (
     <div className="combined-header">
       <div className="header-left">
