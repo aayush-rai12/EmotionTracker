@@ -1,6 +1,6 @@
 /* CHAT DASHBOARD / PAGE CONTAINER */
 .chat-page-container {
-  max-width: 1200px;
+  max-width: 97%;
   margin: 0 auto;
   padding: 2rem 1rem;
   background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
@@ -18,7 +18,7 @@
   background: linear-gradient(135deg, hsl(262, 83%, 58%), hsl(262, 70%, 50%));
   color: white;
   border-radius: 1.25rem;
-  padding: 2rem;
+  padding: 0.8rem;
   margin-bottom: 2rem;
   box-shadow: 0 8px 32px rgba(102, 51, 255, 0.2);
   position: relative;
@@ -71,26 +71,6 @@
   opacity: 0.9;
   margin-top: 0.5rem;
   font-weight: 500;
-}
-
-/* REFRESH BUTTON */
-.chat-refresh-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.chat-refresh-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
 }
 
 /* SEARCH + FILTER */
@@ -246,7 +226,7 @@
 .status-text.online { color: #16a34a; font-weight: 600; }
 .status-text.offline { color: #d23a3a; font-weight: 600; }
 
-.chat-btn {
+.chat-btn-modal {
   background-color: #603eec;
   color: #fff;
   border: none;
@@ -260,7 +240,7 @@
   transition: all 0.2s ease;
 }
 
-.chat-btn:hover {
+.chat-btn-modal:hover {
   background-color: #006ae6;
 }
 
@@ -282,4 +262,14 @@
   .user-card {
     width: 100%;
   }
+}
+.chat-loading-text{
+  text-align: center;
+  color: #555;
+  margin-top: 2rem;
+}
+@media (max-width: 768px) {
+ .chat-controls-row {
+  justify-content: center;
+ }
 }

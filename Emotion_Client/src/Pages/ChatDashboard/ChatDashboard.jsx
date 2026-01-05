@@ -1,17 +1,21 @@
 import React, { useEffect, useState, useMemo } from "react";
 import apiClient from "../../components/utils/apiClient";
-import { FiMessageSquare, FiSearch, FiRefreshCw, FiUsers } from "react-icons/fi";
+import {FiMessageSquare, FiSearch, FiUsers} from "react-icons/fi";
 import defaultAvatar from "../../assets/default_avatar.jpeg";
 import "./ChatDashboard.css";
+import ChatRoomModal from "../../components/Modals/ChatRoomModal/chatRoomModal";
+import UserHeader from "../../components/UserHeader/UserHeader";
+import { useUserContext } from "../../context/UserContextApi";
 
 function ChatDashboard() {
   const [usersList, setUsersList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [ischatModalOpen, setIsChatModalOpen] = useState(false);
   const [filter, setFilter] = useState("all");
-
-  // ===== Fetch Users =====
+  const { isOnline } = useUserContext();
+  const [user, setUser] = useState(null);
+  //  Fetch Users
   const fetchData = async () => {
     const userId = localStorage.getItem("user_id");
     if (!userId) {
@@ -21,27 +25,32 @@ function ChatDashboard() {
     }
 
     try {
-      const response = await apiClient.get(`/chatFeature/registerUserChats/${userId}`);
+      const response = await apiClient.get(
+        `/chatFeature/registerUserChats/${userId}`
+      );
       setUsersList(response?.data?.users || []);
     } catch (error) {
       console.error("Error fetching users:", error);
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
   };
 
   useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("userDetails"));
+    setUser(userData);
     fetchData();
   }, []);
 
-  // ===== Handle Refresh =====
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    await fetchData();
+
+
+  //  Open Chat Modal
+  const openChatModal = (userId) => {
+    //  for opening the chat modal
+    setIsChatModalOpen(true);
   };
 
-  // ===== Filtered Users =====
+  //  Filtered Users
   const filteredUsers = useMemo(() => {
     return usersList
       .filter((user) => {
@@ -59,12 +68,15 @@ function ChatDashboard() {
   return (
     <div className="chat-page-container">
       <div className="chat-content-wrapper">
-        {/* ===== HEADER ===== */}
+        {/*  HEADER  */}
         <header className="chat-header">
           <div className="chat-header-main">
+            <UserHeader 
+            isOnline={isOnline}
+            user={user}/>
             <div className="chat-header-left">
               <FiMessageSquare className="chat-message-icon" />
-              <div>
+              <div className="chat-header-text">
                 <h1 className="chat-page-title">Chat Dashboard</h1>
                 <p className="chat-subtitle">
                   Connect with your emotional support members
@@ -72,17 +84,9 @@ function ChatDashboard() {
               </div>
             </div>
 
-            <button
-              className="chat-refresh-btn"
-              onClick={handleRefresh}
-              disabled={refreshing}
-            >
-              <FiRefreshCw className={refreshing ? "spin" : ""} />
-              {refreshing ? "Refreshing..." : "Refresh"}
-            </button>
           </div>
 
-          {/* ===== SEARCH + FILTER ===== */}
+          {/*  SEARCH + FILTER  */}
           <div className="chat-controls-row">
             <div className="search-input-wrapper">
               <FiSearch className="chat-search-icon" />
@@ -106,7 +110,7 @@ function ChatDashboard() {
                 className={`filter-btn ${filter === "online" ? "active" : ""}`}
                 onClick={() => setFilter("online")}
               >
-                 Online
+                Online
               </button>
               <button
                 className={`filter-btn ${filter === "offline" ? "active" : ""}`}
@@ -123,7 +127,7 @@ function ChatDashboard() {
           </div>
         </header>
 
-        {/* ===== USER GRID ===== */}
+        {/*  USER GRID  */}
         {loading ? (
           <p className="chat-loading-text">Loading users...</p>
         ) : filteredUsers.length === 0 ? (
@@ -143,19 +147,30 @@ function ChatDashboard() {
                       className="user-avatar"
                     />
                     <span
-                      className={`status-dot ${user.isOnline ? "online" : "offline"}`}
+                      className={`status-dot ${
+                        user.isOnline ? "online" : "offline"
+                      }`}
                     ></span>
                   </div>
                   <div className="user-details">
                     <h3>{user.name}</h3>
-                    <p>{user.mood || "No status"} {user.moodEmoji || ""}</p>
+                    <p>
+                      {user.mood || "No status"} {user.moodEmoji || ""}
+                    </p>
                   </div>
                 </div>
                 <div className="user-footer">
-                  <span className={`status-text ${user.isOnline ? "online" : "offline"}`}>
+                  <span
+                    className={`status-text ${
+                      user.isOnline ? "online" : "offline"
+                    }`}
+                  >
                     {user.isOnline ? "Online" : "Offline"}
                   </span>
-                  <button className="chat-btn">
+                  <button
+                    className="chat-btn-modal"
+                    onClick={() => openChatModal(user._id)}
+                  >
                     <FiMessageSquare /> Chat
                   </button>
                 </div>
@@ -163,6 +178,13 @@ function ChatDashboard() {
             ))}
           </div>
         )}
+        <ChatRoomModal
+          show={ischatModalOpen}
+          onClose={() => {
+            setIsChatModalOpen(false);
+          }}
+          chatWithUserId={null}
+        />
       </div>
     </div>
   );
