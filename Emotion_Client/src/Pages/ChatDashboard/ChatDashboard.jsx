@@ -148,7 +148,7 @@ function ChatDashboard() {
 
         {/* USER GRID */}
         {loading ? (
-          <p className="chat-loading-text">Loading users...</p>
+          <div className="chat-loading-container"><p className="chat-loading-text">Loading users...</p></div>
         ) : filteredUsers.length === 0 ? (
           <div className="empty-state">
             <h3>No users found</h3>
