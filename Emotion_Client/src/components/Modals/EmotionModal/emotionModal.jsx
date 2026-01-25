@@ -166,7 +166,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
         toast.error("Failed to save feeling. Please try again.");
       }
     } catch (error) {
-      console.error("Save failed:", error.response?.data || error.message);
+      console.error("Save failed:",error.message);
       alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -216,7 +216,7 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
               fontWeight: 600,
               color: "black",
               textShadow: "0 1px 2px rgba(0,0,0,0.2)",
-              pointerEvents: "none", // so close button is still clickable
+              pointerEvents: "none",
             }}
           >
             {mood?.emoji} Share Your Feeling

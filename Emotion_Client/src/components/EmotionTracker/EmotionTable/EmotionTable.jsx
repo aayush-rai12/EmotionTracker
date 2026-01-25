@@ -15,7 +15,7 @@ const ToggleSwitch = ({ isPublic, onToggle }) => {
       setIsLoading(true);
       await onToggle();
     } catch (error) {
-      console.error("Toggle failed:", error);
+      console.error("Toggle failed:");
     } finally {
       setIsLoading(false);
     }
@@ -80,7 +80,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
 
             return { id, success: response.status === 200 };
           } catch (error) {
-            console.error(`Failed to delete item ${id}:`, error);
+            console.error('Failed to delete item');
             return { id, success: false };
           }
         })
@@ -116,7 +116,6 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
         alert(`Failed to delete ${failedCount} item(s). Please try again.`);
       }
     } catch (error) {
-      console.error("Delete failed:", error);
       toast.error("An error occurred while deleting items.",error.message);
     }
   };

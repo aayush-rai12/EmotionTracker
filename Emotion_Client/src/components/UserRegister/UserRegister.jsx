@@ -115,7 +115,7 @@ const UserRegister = () => {
       setRegistrationSuccess(true);
       setShowLoginModal(true);
     } catch (err) {
-      console.error("Registration error:", err);
+      console.error("Registration error:");
       setErrors({ api: err.response?.data?.message || "Registration failed. Please try again." });
     } finally {
       setIsSubmitting(false);
