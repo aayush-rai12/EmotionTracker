@@ -96,18 +96,35 @@ export const generateSuggestions = async (data) => {
   `;
 
   try {
-    //here I used gemini-1.5-flash model
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-    // const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
-    
-    // Alternative models you can try:
-    // const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-    // const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
-    // const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    // const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
-    
-     // Send prompt to Gemini
-    const result = await model.generateContent(prompt);
+    // Try a list of candidate models (can override with GEMINI_MODEL env var)
+    const modelCandidates = [
+      process.env.GEMINI_MODEL || "gemini-1.5-flash",
+      "gemini-2.0-flash",
+      "gemini-2.5-flash",
+      "gemini-2.5-pro",
+      // Vertex-compatible fallback (if using different API surface)
+      "models/text-bison-001"
+    ];
+
+    let result = null;
+    let lastErr = null;
+    for (const candidate of modelCandidates) {
+      try {
+        const model = genAI.getGenerativeModel({ model: candidate });
+        result = await model.generateContent(prompt);
+        // success
+        break;
+      } catch (err) {
+        lastErr = err;
+        console.warn(`Model '${candidate}' failed:`, err?.message || err);
+        // try next candidate
+      }
+    }
+
+    if (!result) {
+      // rethrow to be caught by outer catch and trigger fallback
+      throw lastErr || new Error("No generative model returned a result");
+    }
     const suggestion = result.response.text();
 
     //Clean unwanted code blocks

@@ -2,16 +2,15 @@ import React from "react";
 import { useState } from "react";
 import "./EmotionCard.css";
 import Ai_suggestion_modal from "../../Modals/Ai_Suggestion_Modal/Ai_Suggestion";
-import { FaLightbulb, FaMagic } from 'react-icons/fa';
+import { FaLightbulb, FaMagic } from "react-icons/fa";
 
-function EmotionCreatedCard({data, userName}) {
-    const [hoverColor, setHoverColor] = useState(null);
-    const [bgColor, setBgColor] = useState("#fcb1b1");
-    const [openAiModal, setOpenAiModal] = useState(false)
-    const [selectedCard, setSelectedCard] = useState(null);
-    
+function EmotionCreatedCard({ data, userName }) {
+  const [hoverColor, setHoverColor] = useState(null);
+  const [bgColor, setBgColor] = useState("#fcb1b1");
+  const [openAiModal, setOpenAiModal] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
 
-    const startHeartRain = (index) => {
+  const startHeartRain = (index) => {
     const card = document.querySelector(`.card-${index}`);
     if (!card) return;
 
@@ -51,29 +50,32 @@ function EmotionCreatedCard({data, userName}) {
           }
           100% {
             transform: translate(${xScatter}px, -300px) scale(1.9) rotate(${
-        Math.random() * 360
-      }deg);
+              Math.random() * 360
+            }deg);
             opacity: 0;
           }
         }
       `;
       styleElement.sheet.insertRule(
         keyframes,
-        styleElement.sheet.cssRules.length
+        styleElement.sheet.cssRules.length,
       );
       heart.style.animation = `${animationName} ${duration}s linear ${delay}s forwards`;
       card.appendChild(heart);
 
-      setTimeout(() => {
-        heart.remove();
-      }, duration * 1000 + delay * 1000);
+      setTimeout(
+        () => {
+          heart.remove();
+        },
+        duration * 1000 + delay * 1000,
+      );
     }
   };
 
-  const handleAiModal =(cardDetails)=>{
-    setSelectedCard(cardDetails)
-    setOpenAiModal(true)
-  }
+  const handleAiModal = (cardDetails) => {
+    setSelectedCard(cardDetails);
+    setOpenAiModal(true);
+  };
 
   return (
     <div
@@ -83,76 +85,82 @@ function EmotionCreatedCard({data, userName}) {
         transition: "background 0.5s ease-in-out",
       }}
     >
-      {data.map(
-        (card, index) => (
-          (
-            <div
-              className={`emotion-card card-${index}`}
-              key={card._id || card.id || index}
-              data-key={card._id || card.id || index}
-              style={{ backgroundColor: card.moodColor }}
-              onMouseEnter={() => setHoverColor(card.moodColor)}
-              onMouseLeave={() => setHoverColor(null)}
-            >
-              <div className="emotion-quote">
-                <p>{card.feelings || "N/A"}</p>
-              </div>
+      {data.map((card, index) => {
+        const delay = Math.min(index, 15) * 0.05;
+        return (
+          <div
+            className={`emotion-card card-${index}`}
+            key={card._id || card.id || index}
+            data-key={card._id || card.id || index}
+            style={{
+              backgroundColor: card.moodColor,
+              animationDelay: `${delay}s`,
+            }}
+            onMouseEnter={() => setHoverColor(card.moodColor)}
+            onMouseLeave={() => setHoverColor(null)}
+          >
+            <div className="emotion-quote">
+              <p>{card.feelings || "N/A"}</p>
+            </div>
 
-              <div className="emotion-info">
-                <div className="info-block">
-                  <span className="label">Intensity</span>
-                  <span className="intensity-tag intensity">
-                    {card.intensity || "N/A"}
-                  </span>
-                </div>
-                <div className="info-block">
-                  <span className="label">Mood</span>
-                  <span className="value mood-tag">{card.mood || "N/A"}</span>
-                </div>
-                <div className="info-block">
-                  <span className="label">Reaction Trigger</span>
-                  <span className="value">{card.triggerReason || "N/A"}</span>
-                </div>
-                <div className="info-block">
-                  <span className="label">Preferred Activity</span>
-                  <span className="value">
-                    {card.preferredActivity || "N/A"}
-                  </span>
-                </div>
+            <div className="emotion-info">
+              <div className="info-block">
+                <span className="label">Intensity</span>
+                <span className="intensity-tag intensity">
+                  {card.intensity || "N/A"}
+                </span>
               </div>
+              <div className="info-block">
+                <span className="label">Mood</span>
+                <span className="value mood-tag">{card.mood || "N/A"}</span>
+              </div>
+              <div className="info-block">
+                <span className="label">Reaction Trigger</span>
+                <span className="value">{card.triggerReason || "N/A"}</span>
+              </div>
+              <div className="info-block">
+                <span className="label">Preferred Activity</span>
+                <span className="value">{card.preferredActivity || "N/A"}</span>
+              </div>
+            </div>
 
-              {/* <div className="footer-roww"> */}
-                <div className="footer-date-like">
-                  <span className="footer-text">
-                    Date:{" "}
-                    {card.createdDate || card.createdAt?.slice(0, 10) || "N/A"}
-                  </span>
-                  <span className="footer-text" style={{ textAlign: "right" }}>
-                    Liked by: You!
-                  </span>
-                </div>
-                <div className="footer-like">
-                  <button
-                    className="like-button"
-                    onClick={() => startHeartRain(index)}
-                  >
-                    💖Like
-                  </button>
-                  <button className="ai-suggestion-button" onClick={()=>handleAiModal(card)}><FaMagic/>Ai</button>
-                </div>
-                {/* <span className="footer-text" style={{ textAlign: "right" }}>
+            {/* <div className="footer-roww"> */}
+            <div className="footer-date-like">
+              <span className="footer-text">
+                Date:{" "}
+                {card.createdDate || card.createdAt?.slice(0, 10) || "N/A"}
+              </span>
+              <span className="footer-text" style={{ textAlign: "right" }}>
+                Liked by: You!
+              </span>
+            </div>
+            <div className="footer-like">
+              <button
+                className="like-button"
+                onClick={() => startHeartRain(index)}
+              >
+                💖Like
+              </button>
+              <button
+                className="ai-suggestion-button"
+                onClick={() => handleAiModal(card)}
+              >
+                <FaMagic />
+                Ai
+              </button>
+            </div>
+            {/* <span className="footer-text" style={{ textAlign: "right" }}>
                   Liked by: You!
                 </span> */}
-              </div>
-            // </div>
-          )
-        )
-      )}
-      <Ai_suggestion_modal 
+          </div>
+          // </div>
+        );
+      })}
+      <Ai_suggestion_modal
         show={openAiModal}
         handleAiModalClose={() => {
-            setOpenAiModal(false);
-          }}
+          setOpenAiModal(false);
+        }}
         selectedAiCard={selectedCard}
         userName={userName}
       />

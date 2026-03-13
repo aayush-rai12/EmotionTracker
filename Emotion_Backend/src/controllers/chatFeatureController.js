@@ -1,25 +1,30 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 import User from "../models/User.js";
 import emotionCardDetails from "../models/UsersEmotion.js";
 
 const registerUserChats = async (req, res) => {
   try {
     const user_Id = req.params.user_Id;
-    console.log(`Fetching chats for user: ${user_Id}`);
 
-    // Mood to emoji mapping
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const search = req.query.search || "";
+    const filter = req.query.filter || "all";
+    const skipIndex = (page - 1) * limit;
+
     const moodEmojis = {
-      'happy': '😊',
-      'sad': '😢',
-      'angry': '😡',
-      'calm': '😌',
-      'excited': '🤩',
-      'loved': '❤️',
-      'celebrating': '🥳',
-      'anxious': '😰',
-      'peaceful': '🧘',
-      'No mood': '💭'
+      happy: "😊",
+      sad: "😢",
+      angry: "😡",
+      calm: "😌",
+      excited: "🤩",
+      loved: "❤️",
+      celebrating: "🥳",
+      anxious: "😰",
+      peaceful: "🧘",
+      "No mood": "💭",
     };
 
     const currentUser = await User.findById(user_Id);
@@ -27,30 +32,78 @@ const registerUserChats = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Get all other users
-    const users = await User.find({ _id: { $ne: user_Id } }, { password: 0, email: 0 });
+    // Aggregation pipeline to handle sorting and searching by latest emotion
+    const pipeline = [
+      { $match: { _id: { $ne: new mongoose.Types.ObjectId(user_Id) } } },
+      {
+        $lookup: {
+          from: "user_emotion_details",
+          let: { userId: "$_id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$user_Id", "$$userId"] } } },
+            { $sort: { createdAt: -1 } },
+            { $limit: 1 },
+          ],
+          as: "latestEmotion",
+        },
+      },
+      {
+        $addFields: {
+          latestEmotionData: { $arrayElemAt: ["$latestEmotion", 0] },
+        },
+      },
+      {
+        $addFields: {
+          computedMood: { $ifNull: ["$latestEmotionData.mood", "No mood"] },
+          // Mock online status - any fake user generated with streak > 5 will show as online
+          isOnline: { $gt: ["$currentStreak", 5] },
+        },
+      },
+    ];
 
-    // For each user, get their latest emotion
-    const usersWithEmotions = await Promise.all(
-      users.map(async (user) => {
-        const latestEmotion = await emotionCardDetails
-          .findOne({ user_Id: user._id })
-          .sort({ createdAt: -1 })
-          .lean();
+    // Search Match
+    if (search) {
+      pipeline.push({
+        $match: {
+          $or: [
+            { name: { $regex: search, $options: "i" } },
+            { computedMood: { $regex: search, $options: "i" } },
+          ],
+        },
+      });
+    }
 
-        const mood = latestEmotion?.mood || "No mood";
-        return {
-          ...user.toObject(),
-          latestMood: mood,
-          moodColor: latestEmotion?.moodColor || "#ccc",
-          moodEmoji: moodEmojis[mood.toLowerCase()] || moodEmojis['No mood'],
-          intensity: latestEmotion?.intensity || "N/A",
-          feelings: latestEmotion?.feelings || "N/A",
-        };
-      })
-    );
+    // Filter Match
+    if (filter === "online") pipeline.push({ $match: { isOnline: true } });
+    if (filter === "offline") pipeline.push({ $match: { isOnline: false } });
 
-    // Get current user's latest emotion
+    // Count Total (ignoring skip/limit) for pagination
+    const countResult = await User.aggregate([
+      ...pipeline,
+      { $count: "total" },
+    ]);
+    const totalUsers = countResult.length > 0 ? countResult[0].total : 0;
+
+    // Apply Pagination
+    pipeline.push({ $skip: skipIndex });
+    pipeline.push({ $limit: limit });
+
+    const paginatedUsers = await User.aggregate(pipeline);
+
+    // Format Users Array
+    const usersWithEmotions = paginatedUsers.map((user) => {
+      const mood = user.computedMood;
+      return {
+        ...user,
+        latestMood: mood,
+        moodColor: user.latestEmotionData?.moodColor || "#ccc",
+        moodEmoji: moodEmojis[mood.toLowerCase()] || moodEmojis["No mood"],
+        intensity: user.latestEmotionData?.intensity || "N/A",
+        feelings: user.latestEmotionData?.feelings || "N/A",
+      };
+    });
+
+    // Format Current User
     const currentUserLatestEmotion = await emotionCardDetails
       .findOne({ user_Id: user_Id })
       .sort({ createdAt: -1 })
@@ -61,7 +114,8 @@ const registerUserChats = async (req, res) => {
       ...currentUser.toObject(),
       latestMood: currentUserMood,
       moodColor: currentUserLatestEmotion?.moodColor || "#ccc",
-      moodEmoji: moodEmojis[currentUserMood.toLowerCase()] || moodEmojis['No mood'],
+      moodEmoji:
+        moodEmojis[currentUserMood.toLowerCase()] || moodEmojis["No mood"],
       intensity: currentUserLatestEmotion?.intensity || "N/A",
       feelings: currentUserLatestEmotion?.feelings || "N/A",
     };
@@ -71,6 +125,8 @@ const registerUserChats = async (req, res) => {
       status: true,
       currentUser: currentUserWithEmotion,
       users: usersWithEmotions,
+      hasMore: skipIndex + usersWithEmotions.length < totalUsers,
+      totalUsers,
     });
   } catch (error) {
     console.error("Error fetching user chats:", error);
