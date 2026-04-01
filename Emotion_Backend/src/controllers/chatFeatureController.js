@@ -1,5 +1,3 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import User from "../models/User.js";
 import emotionCardDetails from "../models/UsersEmotion.js";
