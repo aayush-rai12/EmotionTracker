@@ -106,7 +106,6 @@ const registerUserChats = async (req, res) => {
       .findOne({ user_Id: user_Id })
       .sort({ createdAt: -1 })
       .lean();
-
     const currentUserMood = currentUserLatestEmotion?.mood || "No mood";
     const currentUserWithEmotion = {
       ...currentUser.toObject(),
