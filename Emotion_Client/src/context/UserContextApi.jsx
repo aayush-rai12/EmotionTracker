@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import App from '../App';
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {

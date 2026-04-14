@@ -1,5 +1,3 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import User from "../models/User.js";
 import emotionCardDetails from "../models/UsersEmotion.js";
@@ -126,7 +124,6 @@ export const registerUserChats = async (req, res) => {
       .findOne({ user_Id: user_Id })
       .sort({ createdAt: -1 })
       .lean();
-
     const currentUserMood = currentUserLatestEmotion?.mood || "No mood";
     const currentUserWithEmotion = {
       _id: currentUser._id,

@@ -67,9 +67,7 @@ function EmotionSupportModal({
               alt="You"
               className="chat-modal-avatar"
             />
-            <span className="chat-modal-name">
-              {currentUser?.Name || "You"}
-            </span>
+            <span className="chat-modal-name">{currentUser?.Name || "You"}</span>
           </div>
 
           <div className="chat-modal-connector">
