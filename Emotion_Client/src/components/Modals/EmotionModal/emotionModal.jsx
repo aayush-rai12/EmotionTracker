@@ -166,7 +166,6 @@ const EmotionModal = ({ show, handleClose, fetchEmotionData, editItem }) => {
         toast.error("Failed to save feeling. Please try again.");
       }
     } catch (error) {
-      console.error("Save failed:",error.message);
       alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);

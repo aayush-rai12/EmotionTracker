@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { 
-  FiHeart, 
-  FiMessageCircle, 
-  FiShield, 
+import {
+  FiHeart,
+  FiMessageCircle,
+  FiShield,
   FiLock,
   FiUsers,
-  FiChevronRight
+  FiChevronRight,
 } from "react-icons/fi";
 import defaultAvatar from "../../../assets/default_avatar.jpeg";
 import "./chatRoomModal.css";
@@ -28,34 +28,32 @@ function EmotionSupportModal({
     setIsConnecting(true);
     setTimeout(() => {
       setIsConnecting(false);
-      onStartChat(chatWithUser);
-    }, 600);
+      onStartChat(chatWithUser); // onStartChat will trigger onClose from ChatDashboard
+    }, 1000);
   };
 
   const modalStyle = {
-    '--mood-color-chat-modal': moodColor || '#6f3cff',
+    "--mood-color-chat-modal": moodColor || "#6f3cff",
   };
 
   return (
-    <Modal 
-      show={show} 
-      onHide={onClose} 
-      centered 
+    <Modal
+      show={show}
+      onHide={onClose}
+      centered
       className="chat-modal"
       style={modalStyle}
     >
       <Modal.Header closeButton className="chat-modal-header">
+        <FiHeart className="chat-modal-icon" />
         <Modal.Title className="chat-modal-title">
-          <FiHeart className="chat-modal-icon" />
           Emotional Support
         </Modal.Title>
       </Modal.Header>
 
       <Modal.Body className="chat-modal-body">
         <div className="chat-modal-message">
-          <p className="chat-modal-main">
-            You're entering a safe space 🤍
-          </p>
+          <p className="chat-modal-main">You're entering a safe space 🤍</p>
           <p className="chat-modal-sub">
             Take a deep breath. Share only what feels comfortable.
           </p>
@@ -100,30 +98,30 @@ function EmotionSupportModal({
       </Modal.Body>
 
       <Modal.Footer className="chat-modal-footer">
-        <Button 
-          variant="outline-secondary" 
+        <Button
+          variant="outline-secondary"
           onClick={onClose}
           className="chat-modal-btn chat-modal-btn-secondary"
         >
           Not now
         </Button>
-        
+
         <Button
-          className={`chat-modal-btn chat-modal-btn-primary ${isConnecting ? 'chat-modal-connecting' : ''}`}
+          className={`chat-modal-btn chat-modal-btn-primary ${isConnecting ? "chat-modal-connecting" : ""}`}
           onClick={handleStartChat}
           disabled={isConnecting}
         >
           {isConnecting ? (
-            <>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", width: "100%" }}>
               <div className="chat-modal-spinner"></div>
-              Connecting...
-            </>
+              <span>Connecting...</span>
+            </div>
           ) : (
-            <>
-              <FiMessageCircle />
-              Start Chat
-              <FiChevronRight />
-            </>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", width: "100%" }}>
+              <FiMessageCircle className="chat-modal-btn-icon" />
+              <span>Start Chat</span>
+              <FiChevronRight className="chat-modal-btn-arrow" />
+            </div>
           )}
         </Button>
       </Modal.Footer>
@@ -131,4 +129,5 @@ function EmotionSupportModal({
   );
 }
 
-export default EmotionSupportModal;
+const EmotionSupportModalMemo = React.memo(EmotionSupportModal);
+export default EmotionSupportModalMemo;

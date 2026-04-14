@@ -1,8 +1,10 @@
 import express from 'express';
 import verifyToken from '../middleware/authMiddleware.js';
-import registerUserChats from '../controllers/chatFeatureController.js';
+import {registerUserChats, sendMessage, getChatHistory} from '../controllers/chatFeatureController.js';
 const router = express.Router();
 
 router.get('/registerUserChats/:user_Id', verifyToken, registerUserChats);
+router.post('/sendMessage', verifyToken, sendMessage);
+router.get('/getChatHistory/:senderId/:receiverId', verifyToken, getChatHistory);
 
 export default router;

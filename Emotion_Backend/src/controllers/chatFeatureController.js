@@ -1,10 +1,16 @@
 import mongoose from "mongoose";
 import User from "../models/User.js";
 import emotionCardDetails from "../models/UsersEmotion.js";
+import Message from "../models/Message.js";
 
-const registerUserChats = async (req, res) => {
+export const registerUserChats = async (req, res) => {
   try {
     const user_Id = req.params.user_Id;
+
+    // Security check: Ensure the requester is asking for their own dashboard
+    if (req.user.id !== user_Id) {
+      return res.status(403).json({ message: "Unauthorized access to this user data." });
+    }
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
@@ -32,7 +38,7 @@ const registerUserChats = async (req, res) => {
 
     // Aggregation pipeline to handle sorting and searching by latest emotion
     const pipeline = [
-      { $match: { _id: { $ne: new mongoose.Types.ObjectId(user_Id) } } },
+      { $match: { _id: { $ne: mongoose.Types.ObjectId.createFromHexString(user_Id) } } },
       {
         $lookup: {
           from: "user_emotion_details",
@@ -75,6 +81,18 @@ const registerUserChats = async (req, res) => {
     if (filter === "online") pipeline.push({ $match: { isOnline: true } });
     if (filter === "offline") pipeline.push({ $match: { isOnline: false } });
 
+    // Project only necessary fields (avoid sending sensitive data like email, password)
+    pipeline.push({
+      $project: {
+        _id: 1,
+        name: 1,
+        profileImage: 1,
+        computedMood: 1,
+        isOnline: 1,
+        latestEmotionData: 1,
+      },
+    });
+
     // Count Total (ignoring skip/limit) for pagination
     const countResult = await User.aggregate([
       ...pipeline,
@@ -108,7 +126,9 @@ const registerUserChats = async (req, res) => {
       .lean();
     const currentUserMood = currentUserLatestEmotion?.mood || "No mood";
     const currentUserWithEmotion = {
-      ...currentUser.toObject(),
+      _id: currentUser._id,
+      name: currentUser.name,
+      profileImage: currentUser.profileImage,
       latestMood: currentUserMood,
       moodColor: currentUserLatestEmotion?.moodColor || "#ccc",
       moodEmoji:
@@ -131,4 +151,69 @@ const registerUserChats = async (req, res) => {
   }
 };
 
-export default registerUserChats;
+// Chat controller code stared here
+// chatFeatureController.js
+export const createMessage = async ({ senderId, receiverId, text }) => {
+  const newMessage = new Message({ senderId, receiverId, text });
+  await newMessage.save();
+  return newMessage;
+};
+// Send message (API based)
+export const sendMessage = async (req, res) => {
+  try {
+    const { senderId, receiverId, text } = req.body;
+
+    // Security check: The authenticated user must be the sender
+    if (req.user.id !== senderId) {
+      return res.status(403).json({ message: "Unauthorized. Sender ID must match the logged-in user." });
+    }
+
+    const newMessage = new Message({
+      senderId,
+      receiverId,
+      text,
+    });
+
+    await newMessage.save();
+    res.status(201).json({
+      message: "Message sent successfully",
+      status: true,
+    });
+  } catch (error) {
+    console.error("Error sending message:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+// Get chat history between 2 users
+
+export const getChatHistory = async (req, res) => {
+  try {
+    const { senderId, receiverId } = req.params;
+
+    // Security check: The authenticated user must be one of the participants
+    if (req.user.id !== senderId && req.user.id !== receiverId) {
+      return res.status(403).json({ message: "Unauthorized. You can only view your own chat history." });
+    }
+
+    // Explicitly cast to ObjectId — implicit string cast can silently return
+    // empty results in some Mongoose versions, breaking polling
+    const senderObjId = mongoose.Types.ObjectId.createFromHexString(senderId);
+    const receiverObjId = mongoose.Types.ObjectId.createFromHexString(receiverId);
+
+    const messages = await Message.find({
+      $or: [
+        { senderId: senderObjId, receiverId: receiverObjId },
+        { senderId: receiverObjId, receiverId: senderObjId },
+      ],
+    }).sort({ createdAt: 1 });
+
+    res.status(200).json({
+      message: "Chat history fetched successfully",
+      status: true,
+      messages,
+    });
+  } catch (error) {
+    console.error("Error fetching chat history:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

@@ -6,6 +6,7 @@ import apiClient from "../../components/utils/apiClient";
 import ChatRoomModal from "../../components/Modals/ChatRoomModal/chatRoomModal";
 import UserHeader from "../../components/UserHeader/UserHeader";
 import UserCardsForChat from "../../components/UserCardsForChat/UserCardsForChat";
+import LiveChatWindow from "../../components/LiveChatWindow/LiveChatWindow";
 import { useUserContext } from "../../context/UserContextApi";
 import useDebounce from "../../hooks/useDebounce";
 
@@ -29,6 +30,7 @@ function ChatDashboard() {
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [activeChatUser, setActiveChatUser] = useState(null); // State for the actual active chat window
   const navigate = useNavigate();
 
   /* ---------------- INFINITE SCROLL OBSERVER ---------------- */
@@ -123,148 +125,149 @@ function ChatDashboard() {
   }, [debouncedSearchQuery, filter, fetchUsers]);
 
   /* ---------------- CHAT HANDLERS ---------------- */
-  const openChatModal = (chatUser) => {
+  const openChatModal = useCallback((chatUser) => {
     setSelectedUser(chatUser);
     setIsChatModalOpen(true);
-  };
+  }, []);
 
-  const closeChatModal = () => {
+  const closeChatModal = useCallback(() => {
     setIsChatModalOpen(false);
     setSelectedUser(null);
-  };
-  const handleLogout = () => {
+  }, []);
+
+  const startActualChat = useCallback((user) => {
+    setIsChatModalOpen(false);
+    setActiveChatUser(user);
+  }, []);
+
+  const closeActiveChat = useCallback(() => {
+    setActiveChatUser(null);
+  }, []);
+
+  const handleLogout = useCallback(() => {
     localStorage.removeItem("userDetails");
     localStorage.removeItem("user_id");
     localStorage.removeItem("token");
     navigate("/");
-  };
+  }, [navigate]);
 
   /* ---------------- RENDER ---------------- */
   return (
     <div className="chat-page-container">
       <div className="chat-content-wrapper">
-        {/* HEADER */}
-        <header className="chat-header">
-          <div className="chat-header-main">
-            <UserHeader
-              isOnline={currentUserOnline}
-              user={currentUser}
-              handleLogout={handleLogout}
-            />
-
-            <div className="chat-header-left">
-              <FiMessageSquare className="chat-message-icon" />
-              <div>
-                <h1 className="chat-page-title">Chat Dashboard</h1>
-                <p className="chat-subtitle">
-                  Connect with your emotional support members
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* SEARCH + FILTER */}
-          <div className="chat-controls-row">
-            <div className="search-input-wrapper">
-              <FiSearch className="chat-search-icon" />
-              <input
-                type="text"
-                placeholder="Search by name or mood..."
-                className="chat-search-input"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <div className="chat-filter-buttons">
-              {["all", "online", "offline"].map((type) => (
-                <button
-                  key={type}
-                  className={`filter-btn ${filter === type ? "active" : ""}`}
-                  onClick={() => setFilter(type)}
-                >
-                  {type === "all" && <FiUsers />}
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </button>
-              ))}
-              <button
-                className="filter-btn"
-                onClick={() => navigate("/emotion")}
-              >
-                Back
-              </button>
-            </div>
-
-            <div className="results-count">
-              {usersList.length} {usersList.length === 1 ? "person" : "people"}{" "}
-              found
-            </div>
-          </div>
-        </header>
-
-        {/* USER GRID */}
-        {loading ? (
-          <div className="chat-loading-container">
-            <p className="chat-loading-text">Loading users...</p>
-          </div>
-        ) : usersList.length === 0 ? (
-          <div className="empty-state">
-            <h3>No users found</h3>
-            <p>Try changing your search or filter.</p>
-          </div>
+        {activeChatUser ? (
+          <LiveChatWindow
+            chatWithUser={activeChatUser}
+            currentUser={currentUser}
+            onClose={closeActiveChat}
+          />
         ) : (
           <>
-            <div className="user-grid">
-              {usersList.map((chatUser, index) => {
-                if (usersList.length === index + 1) {
-                  return (
-                    // Attach intersection observer to the very last element
-                    <div
-                      ref={lastUserElementRef}
-                      key={`${chatUser._id}-${index}`}
+            {/* HEADER */}
+            <header className="chat-header">
+              <div className="chat-header-main">
+                <UserHeader
+                  isOnline={currentUserOnline}
+                  user={currentUser}
+                  handleLogout={handleLogout}
+                />
+
+                <div className="chat-header-left">
+                  <FiMessageSquare className="chat-message-icon" />
+                  <div>
+                    <h1 className="chat-page-title">Chat Dashboard</h1>
+                    <p className="chat-subtitle">
+                      Connect with your emotional support members
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* SEARCH + FILTER */}
+              <div className="chat-controls-row">
+                <div className="search-input-wrapper">
+                  <FiSearch className="chat-search-icon" />
+                  <input
+                    type="text"
+                    placeholder="Search by name or mood..."
+                    className="chat-search-input"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+
+                <div className="chat-filter-buttons">
+                  {["all", "online", "offline"].map((type) => (
+                    <button
+                      key={type}
+                      className={`filter-btn ${filter === type ? "active" : ""}`}
+                      onClick={() => setFilter(type)}
                     >
+                      {type === "all" && <FiUsers />}
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </button>
+                  ))}
+                  <button
+                    className="filter-btn"
+                    onClick={() => navigate("/emotion")}
+                  >
+                    Back
+                  </button>
+                </div>
+
+                <div className="results-count">
+                  {usersList.length}{" "}
+                  {usersList.length === 1 ? "person" : "people"} found
+                </div>
+              </div>
+            </header>
+
+            {/* USER GRID */}
+            {loading ? (
+              <div className="chat-loading-container">
+                <p className="chat-loading-text">Loading users...</p>
+              </div>
+            ) : usersList.length === 0 ? (
+              <div className="empty-state">
+                <h3>No users found</h3>
+                <p>Try changing your search or filter.</p>
+              </div>
+            ) : (
+              <>
+                <div className="user-grid">
+                  {usersList.map((chatUser, index) => {
+                    const isLastElement = usersList.length === index + 1;
+                    return (
                       <UserCardsForChat
+                        key={`user-${chatUser._id}-${index}`}
+                        ref={isLastElement ? lastUserElementRef : null}
                         chatUser={chatUser}
                         openChatModal={openChatModal}
                         index={index}
                       />
-                    </div>
-                  );
-                } else {
-                  return (
-                    <UserCardsForChat
-                      key={`${chatUser._id}-${index}`}
-                      chatUser={chatUser}
-                      openChatModal={openChatModal}
-                      index={index}
-                    />
-                  );
-                }
-              })}
-            </div>
+                    );
+                  })}
+                </div>
 
-            {hasMore && (
-              <div style={{ textAlign: "center", margin: "20px 0" }}>
-                <p
-                  className="chat-loading-text"
-                  style={{ fontSize: "14px", color: "gray" }}
-                >
-                  Loading more users...
-                </p>
-              </div>
+                {hasMore && (
+                  <div className="chat-pagination-loading">
+                    <p className="chat-loading-text">Loading more users...</p>
+                  </div>
+                )}
+              </>
             )}
+
+            {/* CHAT MODAL */}
+            <ChatRoomModal
+              show={isChatModalOpen}
+              onClose={closeChatModal}
+              onStartChat={startActualChat}
+              chatWithUser={selectedUser}
+              currentUser={currentUser}
+              moodColor={currentUser?.moodColor}
+            />
           </>
         )}
-
-        {/* CHAT MODAL */}
-        <ChatRoomModal
-          show={isChatModalOpen}
-          onClose={closeChatModal}
-          onStartChat={() => toast.info("Chat feature coming soon!")}
-          chatWithUser={selectedUser}
-          currentUser={currentUser}
-          moodColor={currentUser?.moodColor}
-        />
       </div>
     </div>
   );

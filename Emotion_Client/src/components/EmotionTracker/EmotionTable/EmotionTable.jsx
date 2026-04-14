@@ -80,7 +80,6 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
 
             return { id, success: response.status === 200 };
           } catch (error) {
-            console.error('Failed to delete item');
             return { id, success: false };
           }
         })
@@ -181,7 +180,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
         alert("Failed to update support");
       }
     } catch (error) {
-      console.error("API error:", error);
+      console.error("API error:", error.message);
       alert("Something went wrong while updating support");
     }
   };
@@ -216,7 +215,7 @@ const EmotionTable = ({ data, setData, setShowModal, setEditItem }) => {
         <p className="text-neutral-700">
           Click the button below to add your first entry.
         </p>
-        <button className="add_emotion_btn" onClick={setShowModal}>
+        <button className="primary-button" onClick={setShowModal}>
           Add your first entry<i className="fas fa-plus"></i>
         </button>
       </div>
