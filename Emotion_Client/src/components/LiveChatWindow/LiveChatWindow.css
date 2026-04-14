@@ -1,0 +1,250 @@
+.live-chat-window {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 80px); /* Adjust based on top header */
+  width: 100%;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header */
+.chat-window-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  gap: 16px;
+}
+
+.back-btn, .more-btn {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.back-btn:hover, .more-btn:hover {
+  background: #f5f5f5;
+}
+
+.header-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.avatar-wrapper-chat {
+  position: relative;
+  width: 44px;
+  height: 44px;
+}
+
+.avatar-wrapper-chat img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-details-header h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.mood-pill-small {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  color: white;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Messages Area */
+.chat-messages-container {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: #fcfcfc;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chat-empty-state, .chat-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #888;
+  text-align: center;
+}
+
+.empty-heart-icon {
+  color: #ffd0d0;
+  margin-bottom: 16px;
+}
+
+.chat-empty-state h3 {
+  color: #555;
+  margin: 0 0 8px 0;
+}
+
+.date-divider {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.date-divider span {
+  font-size: 11px;
+  color: #888;
+  background: #f0f0f0;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.message-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 75%;
+}
+
+.message-wrapper.sent {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-wrapper.received .message-content p {
+  background: white;
+  color: #333;
+  border: 1px solid #eee;
+  border-radius: 16px 16px 16px 4px;
+}
+
+.message-wrapper.sent .message-content p {
+  background: #6f3cff; /* Primary purple color */
+  color: white;
+  border-radius: 16px 16px 4px 16px;
+}
+
+.message-content p {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.message-time {
+  font-size: 10px;
+  color: #999;
+  margin-top: 4px;
+  align-self: flex-start;
+}
+
+.message-wrapper.sent .message-time {
+  align-self: flex-end;
+}
+
+/* Input Area */
+.chat-input-area {
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px;
+  background: white;
+  border-top: 1px solid #f0f0f0;
+  align-items: center;
+}
+
+.chat-input-area input {
+  flex: 1;
+  padding: 12px 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  background: #f9f9f9;
+}
+
+.chat-input-area input:focus {
+  border-color: #6f3cff;
+  background: white;
+}
+
+.send-btn {
+  background: #6f3cff;
+  color: white;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.send-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.send-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.send-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(0,0,0,0.1);
+  border-top-color: #6f3cff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

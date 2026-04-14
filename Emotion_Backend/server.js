@@ -10,10 +10,13 @@ import chatFeatureRoutes from './src/routes/chatFeatureRoutes.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Middleware
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(cors());
 app.use(express.json());
 
+// Test route
 app.get('/', (req, res) => {
   res.send('Emotion Tracker Backend is running');
 });
@@ -22,7 +25,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', userRoutes);
 app.use('/api/userEmotion', emotionRoutes);
 app.use('/api/chatFeature', chatFeatureRoutes);
-
+  
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

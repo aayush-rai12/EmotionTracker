@@ -1,16 +1,14 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {FiLogOut, FiHeart, FiUser, FiMail, FiMapPin } from "react-icons/fi";
 import "./UserHeader.css";
 
-function UserHeader({user, isOnline, handleLogout}) {
-  // Function to get appropriate greeting based on time of day
-  const getGreeting = () => {
+const UserHeader = React.memo(function UserHeader({ user, isOnline, handleLogout }) {
+  const greeting = useMemo(() => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good Morning";
     if (hour < 17) return "Good Afternoon";
     return "Good Evening";
-  };
-   const greeting = getGreeting();
+  }, []);
   return (
     <div className="combined-header">
       <div className="header-left">
@@ -87,6 +85,6 @@ function UserHeader({user, isOnline, handleLogout}) {
       </div>
     </div>
   );
-}
+});
 
 export default UserHeader;

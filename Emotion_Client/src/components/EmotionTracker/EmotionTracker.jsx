@@ -23,6 +23,7 @@ import "./EmotionTracker.css";
 import { useNavigate } from "react-router-dom";
 import UserHeader from "../UserHeader/UserHeader";
 import { useUserContext } from "../../context/UserContextApi";
+import { toast } from "react-toastify";
 
 const EmotionTracker = () => {
   const [showModal, setShowModal] = useState(false);
@@ -52,7 +53,7 @@ const EmotionTracker = () => {
         );
         setData(res.data.emotionData || []);
       } catch (error) {
-        alert("Failed to fetch emotion data:", error.message);
+        toast.error("Failed to load your emotional journey.");
       } finally {
         setLoading(false);
       }
@@ -194,7 +195,8 @@ const EmotionTracker = () => {
               </button>
               <button
                 className="chat-btn primary-button"
-                onClick={() => navigate("/chatDeshboard")}
+                onClick={() => toast.info("Mood Visualization coming soon!")}
+                // onClick={() => navigate(`/moodVisualization?id=${userId}`)}
               >
                 <FiTrendingUp /> Mood Visualization
               </button>

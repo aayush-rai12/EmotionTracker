@@ -19,6 +19,11 @@ export const saveUserEmotion = async (req, res) => {
       partnerImpact,
     } = req.body;
 
+    // Security check: User can only save their own data
+    if (req.user.id !== user_Id) {
+      return res.status(403).json({ message: "Unauthorized. You cannot save data for another user." });
+    }
+
     // Logic to save the user's emotion data
     const newEmotion = new usersEmotion({
       user_Id,
@@ -49,6 +54,11 @@ export const getUserEmotions = async (req, res) => {
       return res.status(400).json({ message: "Invalid user ID!" });
     }
 
+    // Security check: User can only fetch their own data
+    if (req.user.id !== user_Id) {
+      return res.status(403).json({ message: "Unauthorized to fetch another user's emotions." });
+    }
+
     // Fetch user's emotion data
     const emotionData = await usersEmotion.find({ user_Id: user_Id });
 
@@ -70,12 +80,15 @@ export const updateEmotionCard = async (req, res) => {
     if (!id) {
       return res.status(400).json({ message: "Invalid emotion card ID!" });
     }
-    // Update the emotion card
-    const updatedCard = await usersEmotion.findByIdAndUpdate(id, updateData, {
-      new: true,
-    });
+    // Update the emotion card (only if owned by the current user)
+    const updatedCard = await usersEmotion.findOneAndUpdate(
+      { _id: id, user_Id: req.user.id },
+      updateData,
+      { new: true }
+    );
+
     if (!updatedCard) {
-      return res.status(404).json({ message: "Emotion card not found!" });
+      return res.status(404).json({ message: "Emotion card not found or unauthorized to update!" });
     }
     res.status(200).json({
       success: true,
@@ -96,11 +109,11 @@ export const deleteEmotionCard = async (req, res) => {
       return res.status(400).json({ message: "Invalid emotion card ID!" });
     }
 
-    // Delete the emotion card
-    const deletedCard = await usersEmotion.findByIdAndDelete(id);
+    // Delete the emotion card (only if owned by the current user)
+    const deletedCard = await usersEmotion.findOneAndDelete({ _id: id, user_Id: req.user.id });
 
     if (!deletedCard) {
-      return res.status(404).json({ message: "Emotion card not found!" });
+      return res.status(404).json({ message: "Emotion card not found or unauthorized to delete!" });
     }
 
     res.status(200).json({
@@ -121,14 +134,14 @@ export const updateSupport = async (req, res) => {
     if (!_id) {
       return res.status(400).json({ message: "Invalid emotion card ID!" });
     }
-    // Update the support field of the emotion card
-    const updatedCard = await usersEmotion.findByIdAndUpdate(
-      _id,
+    // Update the support field of the emotion card (only if owned by the current user)
+    const updatedCard = await usersEmotion.findOneAndUpdate(
+      { _id: _id, user_Id: req.user.id },
       { Emotional_support: supportValues },
       { new: true }
     );
     if (!updatedCard) {
-      return res.status(404).json({ message: "Emotion card not found!" });
+      return res.status(404).json({ message: "Emotion card not found or unauthorized to update support!" });
     }
     res.status(200).json({
       success: true,
