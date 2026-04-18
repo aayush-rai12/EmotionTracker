@@ -1,6 +1,6 @@
 import express from 'express';
 import verifyToken from '../middleware/authMiddleware.js';
-import {registerUserChats, sendMessage, getChatHistory} from '../controllers/chatFeatureController.js';
+import {registerUserChats, getChatHistory} from '../controllers/chatFeatureController.js';
 const router = express.Router();
 
 router.get('/registerUserChats/:user_Id', verifyToken, registerUserChats);
