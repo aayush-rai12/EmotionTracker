@@ -7,6 +7,7 @@ function App() {
   
   return (
     <>
+      <div className="mesh-bg" />
       <Routing />
       <ToastContainer
         position="top-center"

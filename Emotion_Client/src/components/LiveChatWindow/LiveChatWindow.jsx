@@ -164,9 +164,9 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
                 border: `2px solid ${chatWithUser?.moodColor || "#ccc"}`,
               }}
             />
-            <span
+            {/* <span
               className={`status-dot ${chatWithUser?.isOnline ? "online" : "offline"}`}
-            />
+            /> */}
           </div>
           <div className="user-details-header">
             <h3>{chatWithUser?.Name || chatWithUser?.name || "User"}</h3>
@@ -194,11 +194,11 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
           </div>
         ) : messages.length === 0 ? (
           <div className="chat-empty-state">
-            <FiHeart size={48} className="empty-heart-icon" />
-            <h3>It's a safe space</h3>
+            <FiHeart size={54} className="empty-heart-icon" />
+            <h3>Your Safe Space</h3>
             <p>
-              Say hi to {chatWithUser?.Name || chatWithUser?.name} and share
-              your thoughts.
+              Begin a journey of connection. Send a warm hello to{" "}
+              {chatWithUser?.Name || chatWithUser?.name}.
             </p>
           </div>
         ) : (
