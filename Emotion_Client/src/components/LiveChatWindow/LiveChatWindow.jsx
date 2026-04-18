@@ -16,10 +16,24 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
   const senderId = currentUser?.user_Id || localStorage.getItem("user_id");
   const receiverId = chatWithUser?._id;
 
+  // Socket handlers (Join and Re-join)
   useEffect(() => {
-    if (senderId) {
+    if (!senderId) return;
+
+    const handleJoin = () => {
+      console.log("[Socket] Emitting 'join' for user:", senderId);
       socket.emit("join", senderId);
-    }
+    };
+
+    // Join immediately
+    handleJoin();
+
+    // Re-join on reconnection
+    socket.on("connect", handleJoin);
+
+    return () => {
+      socket.off("connect", handleJoin);
+    };
   }, [senderId]);
 
   useEffect(() => {
@@ -28,6 +42,7 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
       isMountedRef.current = false;
     };
   }, []);
+
   // Scroll to bottom whenever messages array changes
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -56,15 +71,18 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
 
   // Socket listener for real-time messages
   useEffect(() => {
-    socket.on("receive_message", (data) => {
+    const handleReceiveMessage = (data) => {
+      console.log("[Socket] Message received:", data);
       // Only add message if it's from the person we are chatting with
       if (data.senderId === receiverId) {
         setMessages((prev) => [...prev, data]);
       }
-    });
+    };
+
+    socket.on("receive_message", handleReceiveMessage);
 
     return () => {
-      socket.off("receive_message");
+      socket.off("receive_message", handleReceiveMessage);
     };
   }, [receiverId]);
 
