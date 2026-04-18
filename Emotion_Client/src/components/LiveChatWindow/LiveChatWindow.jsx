@@ -21,7 +21,6 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
     if (!senderId) return;
 
     const handleJoin = () => {
-      console.log("[Socket] Emitting 'join' for user:", senderId);
       socket.emit("join", senderId);
     };
 
@@ -72,7 +71,6 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
   // Socket listener for real-time messages
   useEffect(() => {
     const handleReceiveMessage = (data) => {
-      console.log("[Socket] Message received:", data);
       // Only add message if it's from the person we are chatting with
       if (data.senderId === receiverId) {
         setMessages((prev) => [...prev, data]);
