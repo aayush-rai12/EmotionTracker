@@ -159,44 +159,43 @@ export const createMessage = async ({ senderId, receiverId, text }) => {
   return newMessage;
 };
 // Send message (API based)
-export const sendMessage = async (req, res) => {
-  try {
-    const { senderId, receiverId, text } = req.body;
+// export const sendMessage = async (req, res) => {
+//   try {
+//     const { senderId, receiverId, text } = req.body;
 
-    // Security check: The authenticated user must be the sender
-    if (req.user.id !== senderId) {
-      return res.status(403).json({ message: "Unauthorized. Sender ID must match the logged-in user." });
-    }
+//     // Security check: The authenticated user must be the sender
+//     if (req.user.id !== senderId) {
+//       return res.status(403).json({ message: "Unauthorized. Sender ID must match the logged-in user." });
+//     }
 
-    const newMessage = new Message({
-      senderId,
-      receiverId,
-      text,
-    });
+//     const newMessage = new Message({
+//       senderId,
+//       receiverId,
+//       text,
+//     });
 
-    await newMessage.save();
-    res.status(201).json({
-      message: "Message sent successfully",
-      status: true,
-    });
-  } catch (error) {
-    console.error("Error sending message:", error.message);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
+//     await newMessage.save();
+//     res.status(201).json({
+//       message: "Message sent successfully",
+//       status: true,
+//     });
+//   } catch (error) {
+//     console.error("Error sending message:", error.message);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
 // Get chat history between 2 users
 
 export const getChatHistory = async (req, res) => {
   try {
-    const { senderId, receiverId } = req.params;
+    const { receiverId } = req.params;
+    const senderId = req.user.id; // Automatically get from authenticated token
 
-    // Security check: The authenticated user must be one of the participants
-    if (req.user.id !== senderId && req.user.id !== receiverId) {
-      return res.status(403).json({ message: "Unauthorized. You can only view your own chat history." });
+    if (!receiverId) {
+      return res.status(400).json({ message: "Receiver ID is required." });
     }
 
-    // Explicitly cast to ObjectId — implicit string cast can silently return
-    // empty results in some Mongoose versions, breaking polling
+    // Explicitly cast to ObjectId
     const senderObjId = mongoose.Types.ObjectId.createFromHexString(senderId);
     const receiverObjId = mongoose.Types.ObjectId.createFromHexString(receiverId);
 

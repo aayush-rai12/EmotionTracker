@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import apiClient from "../utils/apiClient";
 import defaultAvatar from "../../assets/default_avatar.jpeg";
 import "./LiveChatWindow.css";
+import { socket } from "../utils/socket";
 
 function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
   const [messages, setMessages] = useState([]);
@@ -12,6 +13,14 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef(null);
   const isMountedRef = useRef(true);
+  const senderId = currentUser?.user_Id || localStorage.getItem("user_id");
+  const receiverId = chatWithUser?._id;
+
+  useEffect(() => {
+    if (senderId) {
+      socket.emit("join", senderId);
+    }
+  }, [senderId]);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -19,9 +28,6 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
       isMountedRef.current = false;
     };
   }, []);
-
-  const senderId = currentUser?.user_Id || localStorage.getItem("user_id");
-  const receiverId = chatWithUser?._id;
   // Scroll to bottom whenever messages array changes
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -36,7 +42,7 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
     if (!senderId || !receiverId) return;
     try {
       const response = await apiClient.get(
-        `/chatFeature/getChatHistory/${senderId}/${receiverId}`,
+        `/chatFeature/getChatHistory/${receiverId}`,
       );
       if (isMountedRef.current && response.data?.status) {
         setMessages(response.data.messages);
@@ -48,19 +54,25 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
     }
   };
 
-  // Setup short polling (Smart Polling)
+  // Socket listener for real-time messages
   useEffect(() => {
-    // Initial fetch
+    socket.on("receive_message", (data) => {
+      // Only add message if it's from the person we are chatting with
+      if (data.senderId === receiverId) {
+        setMessages((prev) => [...prev, data]);
+      }
+    });
+
+    return () => {
+      socket.off("receive_message");
+    };
+  }, [receiverId]);
+
+  // Fetch initial history
+  useEffect(() => {
     fetchMessages();
 
-    // Poll every 3 seconds ONLY if the user is looking at this tab
-    const intervalId = setInterval(() => {
-      if (document.visibilityState === "visible") {
-        fetchMessages();
-      }
-    }, 3000);
-
-    // Instantly fetch if they switch back to this tab
+    // Re-fetch if they switch back to this tab (optional safety)
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
         fetchMessages();
@@ -69,7 +81,6 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      clearInterval(intervalId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [senderId, receiverId]);
@@ -97,16 +108,15 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
     setIsSending(true);
 
     try {
-      const res = await apiClient.post(
-        "/chatFeature/sendMessage",
-        messagePayload,
-      );
-      if (isMountedRef.current && !res.data?.status) {
-        toast.error("Failed to send message");
+      socket.emit("send_message", {
+        senderId,
+        receiverId,
+        text: inputText,
+      });
+
+      if (isMountedRef.current) {
+        toast.success("Message sent");
       }
-      // We don't necessarily need to fetch again immediately because polling will catch updates,
-      // but doing an immediate fetch ensures consistency
-      if (isMountedRef.current) fetchMessages();
     } catch (error) {
       if (isMountedRef.current) toast.error("Error sending message");
       console.error("Send error:", error.message);
@@ -213,7 +223,7 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
                       className="message-avatar"
                     />
                   )}
-                   <div className="message-content">
+                  <div className="message-content">
                     <p>{msg.text}</p>
                     <span className="message-time">
                       {formatTime(msg.createdAt)}
