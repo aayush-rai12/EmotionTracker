@@ -24,7 +24,6 @@ export const initSocket = (io) => {
         await newMessage.save();
 
         const receiverSocketId = onlineUsers.get(receiverId);
-        console.log(`[Socket] Broadcasting message to ${receiverId}. Found socket: ${receiverSocketId || "OFFLINE"}`);
         if (receiverSocketId) {
           io.to(receiverSocketId).emit("receive_message", {
             ...data,
