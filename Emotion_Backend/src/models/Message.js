@@ -22,9 +22,9 @@ const messageSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // ← correct place: 2nd arg as options, adds createdAt & updatedAt
+    timestamps: true, //adds createdAt & updatedAt
   }
 );
 
 const Message = mongoose.model("Message", messageSchema);
-export default Message;
+export default Message;

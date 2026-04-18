@@ -4,7 +4,7 @@ import {registerUserChats, sendMessage, getChatHistory} from '../controllers/cha
 const router = express.Router();
 
 router.get('/registerUserChats/:user_Id', verifyToken, registerUserChats);
-router.post('/sendMessage', verifyToken, sendMessage);
-router.get('/getChatHistory/:senderId/:receiverId', verifyToken, getChatHistory);
+// router.post('/sendMessage', verifyToken, sendMessage);
+router.get('/getChatHistory/:receiverId', verifyToken, getChatHistory);
 
 export default router;
