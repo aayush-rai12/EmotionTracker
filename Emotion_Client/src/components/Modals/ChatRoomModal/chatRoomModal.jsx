@@ -71,7 +71,7 @@ function EmotionSupportModal({
           </div>
 
           <div className="chat-modal-connector">
-            <FiUsers className="chat-modal-connector-icon" />
+           <FiUsers className="chat-modal-connector-icon" />
           </div>
 
           <div className="chat-modal-profile">

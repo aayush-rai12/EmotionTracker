@@ -43,6 +43,9 @@ const UserHeader = React.memo(function UserHeader({ user, isOnline, handleLogout
                   src={user.profileImage}
                   alt={user.Name}
                   className="profile-image"
+                  loading="lazy"
+                  width="68"
+                  height="68"
                 />
               ) : (
                 <div className="avatar-placeholder">
@@ -51,7 +54,7 @@ const UserHeader = React.memo(function UserHeader({ user, isOnline, handleLogout
               )}
             </div>
             <div className="user-details">
-              <h3>{user?.Name || "User"}</h3>
+              <h2>{user?.Name || "User"}</h2>
               <p>
                 <FiMail size={12} />
                 {user?.email || "user@example.com"}
@@ -77,6 +80,7 @@ const UserHeader = React.memo(function UserHeader({ user, isOnline, handleLogout
               className="logout-btn"
               onClick={handleLogout}
               title="Logout"
+              aria-label="Logout from your account"
             >
               <FiLogOut size={18} />
             </button>

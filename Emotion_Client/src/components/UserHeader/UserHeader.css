@@ -97,7 +97,7 @@
   gap: 8px;
   padding: 12px 20px;
   background: linear-gradient(135deg, #f5f0ff, #ede6ff);
-  border: 1px solid rgba(109, 74, 255, 0.15);
+  border: 1px solid rgba(109, 74, 255, 0.3);
   border-radius: 50px;
   box-shadow: 0 4px 12px rgba(109, 74, 255, 0.08);
   transition: all 0.3s ease;
@@ -253,7 +253,7 @@
   color: var(--success);
 }
 .login-status-offline {
-  color: #ef4444;
+  color: #b91c1c;
 }
 
 /* Logout Button */
@@ -262,7 +262,7 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 1.5px solid rgba(109, 74, 255, 0.2);
+  border: 1.5px solid rgba(109, 74, 255, 0.4);
   color: var(--text-secondary);
   width: 40px;
   height: 40px;
