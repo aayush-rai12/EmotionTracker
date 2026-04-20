@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import {
   FiPlus,
   FiBarChart2,
@@ -15,9 +15,10 @@ import {
   FiTrendingUp,
 } from "react-icons/fi";
 
-import EmotionTable from "./EmotionTable/EmotionTable";
-import EmotionModal from "../Modals/EmotionModal/emotionModal";
-import EmotionCreatedCard from "./EmotionCard/EmotionCard";
+// Lazy load heavy components for performance boost
+const EmotionTable = lazy(() => import("./EmotionTable/EmotionTable"));
+const EmotionModal = lazy(() => import("../Modals/EmotionModal/emotionModal"));
+const EmotionCreatedCard = lazy(() => import("./EmotionCard/EmotionCard"));
 import apiClient from "../utils/apiClient";
 import "./EmotionTracker.css";
 import { useNavigate } from "react-router-dom";
@@ -97,7 +98,12 @@ const EmotionTracker = () => {
           <p>Loading your profile and emotions...</p>
         </div>
       ) : (
-        <div className="fade-in-section">
+        <Suspense fallback={
+          <div className="tracker-loading-container">
+            <div className="tracker-spinner"></div>
+          </div>
+        }>
+          <div className="fade-in-section">
           {/* Stats Section */}
           <div className="stats-section">
             <div className="stat-card streak-card">
@@ -151,7 +157,7 @@ const EmotionTracker = () => {
             </div>
           </div>
 
-          <div className="emotion-content">
+      <main className="emotion-content">
             <div className="controls-panel">
               <button
                 className="primary-button add-entry-btn"
@@ -177,7 +183,9 @@ const EmotionTracker = () => {
 
               <div className="filter-controls">
                 <FiFilter />
+                <label htmlFor="mood-filter" className="sr-only">Filter by time</label>
                 <select
+                  id="mood-filter"
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                   className="filter-select"
@@ -215,7 +223,7 @@ const EmotionTracker = () => {
                 <div className="empty-illustration">
                   <div className="emoji-placeholder">😊</div>
                 </div>
-                <h3>No emotions recorded yet</h3>
+                <h2 className="empty-title">No emotions recorded yet</h2>
                 <p>
                   Start tracking your emotions to understand patterns and
                   improve wellbeing
@@ -255,9 +263,10 @@ const EmotionTracker = () => {
               fetchEmotionData={fetchEmotionData}
               editItem={editItem}
             />
-          </div>
+          </main>
         </div>
-      )}
+      </Suspense>
+    )}
     </div>
   );
 };

@@ -7,10 +7,10 @@
   --accent: #4cd964;
   --background: #f8f9fa;
   --card-bg: #ffffff;
-  --text-primary: #2d3748;
-  --text-secondary: #718096;
+  --text-primary: #1a202c;
+  --text-secondary: #334155;
   --border: #e2e8f0;
-  --success: #48bb78;
+  --success: #166534;
   --warning: #ed8936;
   --error: #f56565;
 }
@@ -327,4 +327,17 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Accessibility Utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
