@@ -68,12 +68,20 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
     }
   };
 
+  // Mark messages as read via socket
+  const markAsRead = () => {
+    if (!senderId || !receiverId) return;
+    socket.emit("mark_messages_read", { senderId, receiverId });
+  };
+
   // Socket listener for real-time messages
   useEffect(() => {
     const handleReceiveMessage = (data) => {
       // Only add message if it's from the person we are chatting with
       if (data.senderId === receiverId) {
         setMessages((prev) => [...prev, data]);
+        // Also mark as read immediately
+        markAsRead();
       }
     };
 
@@ -87,6 +95,7 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
   // Fetch initial history
   useEffect(() => {
     fetchMessages();
+    markAsRead(); // Mark as read when chat opens
 
     // Re-fetch if they switch back to this tab (optional safety)
     const handleVisibilityChange = () => {
@@ -130,9 +139,9 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
         text: inputText,
       });
 
-      if (isMountedRef.current) {
-        toast.success("Message sent");
-      }
+      // if (isMountedRef.current) {
+      //   toast.success("Message sent");
+      // }
     } catch (error) {
       if (isMountedRef.current) toast.error("Error sending message");
       console.error("Send error:", error.message);

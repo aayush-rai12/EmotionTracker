@@ -5,17 +5,16 @@ import "./UserCardsForChat.css";
 
 const UserCardsForChat = React.memo(
   React.forwardRef(({ chatUser, openChatModal, index = 0 }, ref) => {
-    // Stagger the animation delay based on index (cap at 15 so it doesn't take forever to load late items)
+    // Stagger the animation delay based on index
     const delay = Math.min(index, 15) * 0.05;
 
     return (
       <div ref={ref} className="user-card" style={{ animationDelay: `${delay}s` }}>
-        {/* {chatUser?.unreadCount > 0 && ( */}
+        {chatUser?.unreadMessageCount > 0 && (
           <span className="unread-pill">
-            {/* <FiMessageCircle /> Unread: {chatUser.unreadCount} */}
-            <FiMessageCircle /> Unread: 20
+            <FiMessageCircle /> Unread: {chatUser.unreadMessageCount}
           </span>
-        {/* )} */}
+        )}
         <div className="avatar-wrapper">
           <img
             src={chatUser.profileImage || defaultAvatar}

@@ -63,6 +63,39 @@ export const registerUserChats = async (req, res) => {
           isOnline: { $gt: ["$currentStreak", 5] },
         },
       },
+      {
+        $lookup: {
+          from: "messages",
+          let: { userId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$senderId", "$$userId"] },
+                    {
+                      $eq: [
+                        "$receiverId",
+                        mongoose.Types.ObjectId.createFromHexString(user_Id),
+                      ],
+                    },
+                    { $eq: ["$seen", false] },
+                  ],
+                },
+              },
+            },
+            { $count: "count" },
+          ],
+          as: "unreadMessages",
+        },
+      },
+      {
+        $addFields: {
+          unreadMessageCount: {
+            $ifNull: [{ $arrayElemAt: ["$unreadMessages.count", 0] }, 0],
+          },
+        },
+      },
     ];
 
     // Search Match
@@ -90,6 +123,7 @@ export const registerUserChats = async (req, res) => {
         computedMood: 1,
         isOnline: 1,
         latestEmotionData: 1,
+        unreadMessageCount: 1,
       },
     });
 
@@ -198,6 +232,12 @@ export const getChatHistory = async (req, res) => {
     // Explicitly cast to ObjectId
     const senderObjId = mongoose.Types.ObjectId.createFromHexString(senderId);
     const receiverObjId = mongoose.Types.ObjectId.createFromHexString(receiverId);
+
+    // Mark messages as read
+    await Message.updateMany(
+      { senderId: receiverObjId, receiverId: senderObjId, seen: false },
+      { $set: { seen: true } }
+    );
 
     const messages = await Message.find({
       $or: [
