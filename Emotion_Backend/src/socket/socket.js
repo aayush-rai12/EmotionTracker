@@ -36,6 +36,23 @@ export const initSocket = (io) => {
       }
     });
 
+    // mark messages as read
+    socket.on("mark_messages_read", async ({ senderId, receiverId }) => {
+      try {
+        await Message.updateMany(
+          { senderId: receiverId, receiverId: senderId, seen: false },
+          { $set: { seen: true } }
+        );
+        // Optionally notify the sender that messages were read
+        const senderSocketId = onlineUsers.get(receiverId);
+        if (senderSocketId) {
+          io.to(senderSocketId).emit("messages_read", { readerId: senderId });
+        }
+      } catch (error) {
+        console.error("Error marking messages as read:", error);
+      }
+    });
+
     // disconnect
     socket.on("disconnect", () => {
       for (let [userId, socketId] of onlineUsers.entries()) {

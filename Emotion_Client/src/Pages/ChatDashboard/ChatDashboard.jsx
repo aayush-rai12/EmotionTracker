@@ -12,6 +12,7 @@ import useDebounce from "../../hooks/useDebounce";
 
 import "./ChatDashboard.css";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../../components/utils/socket";
 
 function ChatDashboard() {
   const { isOnline: currentUserOnline } = useUserContext();
@@ -124,6 +125,39 @@ function ChatDashboard() {
     fetchUsers(1, debouncedSearchQuery, filter);
   }, [debouncedSearchQuery, filter, fetchUsers]);
 
+  // Socket logic for unread counts
+  useEffect(() => {
+    const userId = localStorage.getItem("user_id");
+    if (!userId) return;
+
+    socket.emit("join", userId);
+
+    const handleReceiveMessage = (data) => {
+      // If we are NOT currently chatting with this user, increment their unread count
+      if (activeChatUser?._id !== data.senderId) {
+        setUsersList((prev) =>
+          prev.map((u) =>
+            u._id === data.senderId
+              ? { ...u, unreadMessageCount: (u.unreadMessageCount || 0) + 1 }
+              : u,
+          ),
+        );
+      }
+    };
+
+    const handleMessagesRead = (data) => {
+      // If someone else read our messages, we could show read receipts here if we wanted
+    };
+
+    socket.on("receive_message", handleReceiveMessage);
+    socket.on("messages_read", handleMessagesRead);
+
+    return () => {
+      socket.off("receive_message", handleReceiveMessage);
+      socket.off("messages_read", handleMessagesRead);
+    };
+  }, [activeChatUser]);
+
   /* ---------------- CHAT HANDLERS ---------------- */
   const openChatModal = useCallback((chatUser) => {
     setSelectedUser(chatUser);
@@ -138,6 +172,12 @@ function ChatDashboard() {
   const startActualChat = useCallback((user) => {
     setIsChatModalOpen(false);
     setActiveChatUser(user);
+    // Clear unread count for this user in the list
+    setUsersList((prev) =>
+      prev.map((u) =>
+        u._id === user._id ? { ...u, unreadMessageCount: 0 } : u,
+      ),
+    );
   }, []);
 
   const closeActiveChat = useCallback(() => {
