@@ -19,6 +19,11 @@ function ChatDashboard() {
 
   const [currentUser, setCurrentUser] = useState(null);
   const [usersList, setUsersList] = useState([]);
+  const usersListRef = useRef(usersList);
+  
+  useEffect(() => {
+    usersListRef.current = usersList;
+  }, [usersList]);
   const [loading, setLoading] = useState(true);
 
   // Pagination states
@@ -61,8 +66,9 @@ function ChatDashboard() {
     async (pageNum = 1, query = "", fType = "all") => {
       const userId = localStorage.getItem("user_id");
       if (!userId) {
-        toast.error("User not authenticated");
+        toast.error("User not authenticated, Please try to login");
         setLoading(false);
+        navigate("/");
         return;
       }
 
@@ -132,9 +138,22 @@ function ChatDashboard() {
 
     socket.emit("join", userId);
 
-    const handleReceiveMessage = (data) => {
-      // If we are NOT currently chatting with this user, increment their unread count
+    const handleReceiveMessage = (data) => {      
+      // If we are NOT currently chatting with this user, show notification and increment unread count
       if (activeChatUser?._id !== data.senderId) {
+        // Try to get name from data, fallback to usersList lookup, then to default
+        const senderInList = usersListRef.current.find((u) => u._id === data.senderId);
+        const nameToShow = data.senderName || senderInList?.name || "Someone";
+        
+        toast.info(`New message from ${nameToShow}`, {
+          position: "bottom-right",
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+
         setUsersList((prev) =>
           prev.map((u) =>
             u._id === data.senderId
