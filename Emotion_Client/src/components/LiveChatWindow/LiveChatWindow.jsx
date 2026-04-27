@@ -135,6 +135,7 @@ function LiveChatWindow({ chatWithUser, currentUser, onClose }) {
     try {
       socket.emit("send_message", {
         senderId,
+        senderName: currentUser?.Name || currentUser?.name || "Someone",
         receiverId,
         text: inputText,
       });
