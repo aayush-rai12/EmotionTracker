@@ -240,6 +240,11 @@ function ChatDashboard() {
                     </p>
                   </div>
                 </div>
+                <div>
+                  <button className="filter-btn premium-button" onClick={() => toast.info("Premium access coming soon!")}>
+                    Get Premium Access
+                  </button>
+                </div>
               </div>
 
               {/* SEARCH + FILTER */}
